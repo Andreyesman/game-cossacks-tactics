@@ -562,7 +562,7 @@ func move_along_path(map_path: Array[Vector2i], ap_cost: int) -> void:
 	
 	move_finished.emit()
 
-func take_damage(amount: int, is_headshot: bool = false, armor_pen: float = 0.0, armor_dmg_mult: float = 1.0) -> int:
+func take_damage(amount: int, is_headshot: bool = false, armor_pen: float = 0.0, armor_dmg_mult: float = 1.0, killer: Node2D = null) -> int:
 	if is_dead: return 0
 	
 	var hp_before = hp
@@ -609,7 +609,7 @@ func take_damage(amount: int, is_headshot: bool = false, armor_pen: float = 0.0,
 	await get_tree().create_timer(0.6).timeout # Чекаємо завершення анімації -HP
 	
 	if hp <= 0:
-		die()
+		die(killer)
 	else:
 		# Перевірка на паніку від сильного поранення (>25% HP)
 		if float(hp_lost) > float(max_hp) * 0.25:
@@ -780,7 +780,7 @@ func execute_shoot(target: Node2D, skill: Dictionary) -> void:
 		var is_head = (randi() % 100) < 15
 
 		var armor_pen = skill.get("armor_pen", 0.0)
-		var actual_damage = await final_target.take_damage(amount, is_head, armor_pen)
+		var actual_damage = await final_target.take_damage(amount, is_head, armor_pen, 1.0, self)
 		damage_dealt_in_battle += actual_damage
 		
 		if bm:
@@ -900,7 +900,7 @@ func _perform_attack_logic(target: Node2D, _skill: Dictionary, is_counter: bool 
 		var armor_pen = _skill.get("armor_pen", 0.0)
 		var armor_dmg = _skill.get("armor_dmg", 1.0)
 		# Наносимо шкоду і отримуємо реальний результат
-		var actual_damage = await target.take_damage(amount, is_head, armor_pen, armor_dmg)
+		var actual_damage = await target.take_damage(amount, is_head, armor_pen, armor_dmg, self)
 		damage_dealt_in_battle += actual_damage
 		
 		var bm = get_parent().find_child("BattleManager")
@@ -969,9 +969,14 @@ func perform_opportunity_attack(target: Node2D) -> bool:
 	tween.tween_property(self, "position", original_pos, 0.1).set_trans(Tween.TRANS_QUAD)
 	
 	if is_hit:
-		var damage = randi_range(20, 35)
+		# Шкода залежить від зброї нападника (фолбек 20–35, як було)
+		var d_min = weapon_resource.damage_min if weapon_resource else 20
+		var d_max = weapon_resource.damage_max if weapon_resource else 35
+		var opp_armor_pen = weapon_resource.armor_penetration if weapon_resource else 0.0
+		var opp_armor_dmg = weapon_resource.armor_damage_modifier if weapon_resource else 1.0
+		var damage = randi_range(d_min, d_max)
 		var is_head = (randi() % 100) < 25
-		var actual_damage = await target.take_damage(damage, is_head)
+		var actual_damage = await target.take_damage(damage, is_head, opp_armor_pen, opp_armor_dmg, self)
 		damage_dealt_in_battle += actual_damage
 		
 		var bm = get_parent().find_child("BattleManager")
@@ -1202,7 +1207,7 @@ func gain_xp(amount: int) -> void:
 			hp = min(hp + 2, max_hp)
 
 
-func die() -> void:
+func die(killer: Node2D = null) -> void:
 	if is_dead: return
 	is_dead = true
 	AudioManager.play_sfx("death")
@@ -1216,17 +1221,20 @@ func die() -> void:
 	var my_map_pos = IsoMath.local_to_map(position)
 	_spread_panic_to_allies(4, 15, "💀 " + tr("BATTLE_PANIC_DEATH") % name)
 	
-	# Бонус ворогам
+	# XP за вбивство — насамперед вбивці, навіть якщо він стріляв здалеку
+	var xp_reward = data.xp_reward if data and "xp_reward" in data else 30
+	if killer and killer is CombatUnit and not killer.get("is_dead") and killer.get("team") != team:
+		killer.gain_xp(xp_reward)
+
+	# Бонус ворогам поруч: перевірка духу + половина XP свідкам убивства
 	for child in get_parent().get_children():
 		if child is CombatUnit and not child.get("is_dead") and child != self:
 			if child.get("team") != team:
 				var other_map_pos = IsoMath.local_to_map(child.position)
 				if IsoMath.get_dist_4(my_map_pos, other_map_pos) <= 3:
 					child.trigger_resolve_check(-5) # Смерть ворога (бонус)
-					# XP за вбивство
-					var xp_reward = data.xp_reward if data and "xp_reward" in data else 30
-					if child is CombatUnit:
-						child.gain_xp(xp_reward)
+					if child != killer:
+						child.gain_xp(int(xp_reward / 2.0))
 	
 	# Прибираємо обводку активності
 	if _sprite:
