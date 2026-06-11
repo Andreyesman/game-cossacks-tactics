@@ -135,6 +135,16 @@ func _ready() -> void:
 	setup_from_data()
 	update_sprite()
 
+var _idle_time: float = randf() * 10.0
+
+func _process(delta: float) -> void:
+	if is_dead or is_moving: return
+	if _sprite:
+		_idle_time += delta * 2.0
+		var scale_y = 0.7 + sin(_idle_time) * 0.015
+		var scale_x = 0.7 - sin(_idle_time) * 0.007
+		_sprite.scale = Vector2(scale_x, scale_y)
+
 func setup_from_data() -> void:
 	if data:
 		max_hp = data.base_hp if data.base_hp > 0 else 60
@@ -539,13 +549,27 @@ func move_along_path(map_path: Array[Vector2i], ap_cost: int) -> void:
 
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_LINEAR)
+	
+	var sprite_tween = create_tween()
+	sprite_tween.set_trans(Tween.TRANS_LINEAR)
+	
 	for i in range(1, map_path.size()):
 		var target_world = IsoMath.get_cell_center(map_path[i])
 		var dir = target_world - IsoMath.get_cell_center(map_path[i - 1])
 		tween.tween_callback(_update_sprite_direction.bind(dir))
 		tween.tween_property(self, "position", target_world, 0.25)
+		
+		if _sprite:
+			sprite_tween.tween_property(_sprite, "position:y", -12.0, 0.125).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			sprite_tween.parallel().tween_property(_sprite, "rotation", deg_to_rad(5.0 if dir.x > 0 else -5.0), 0.125)
+			sprite_tween.tween_property(_sprite, "position:y", 0.0, 0.125).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+			sprite_tween.parallel().tween_property(_sprite, "rotation", 0.0, 0.125)
 
 	await tween.finished
+	if _sprite:
+		_sprite.position = Vector2.ZERO
+		_sprite.rotation = 0.0
+		_sprite.scale = Vector2(0.7, 0.7)
 	position = IsoMath.get_cell_center(map_path.back())
 	is_moving = false
 	_move_target = Vector2i(-1, -1)
@@ -873,9 +897,15 @@ func _perform_attack_logic(target: Node2D, _skill: Dictionary, is_counter: bool 
 	# Анімація залежить від типу навички
 	var original_pos = position
 	var tween = create_tween()
+	var dir = (target.position - position).normalized()
+	
+	if _sprite:
+		var rotate_tween = create_tween()
+		rotate_tween.tween_property(_sprite, "rotation", deg_to_rad(12.0 if dir.x > 0 else -12.0), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		rotate_tween.tween_property(_sprite, "rotation", 0.0, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
 	if _skill.get("id", "") == "thrust":
 		# Lunge: короткий випад вперед на ~1 гекс і різке повернення
-		var dir = (target.position - position).normalized()
 		var lunge_pos = position + dir * 80.0 # ~1 гекс вперед
 		tween.tween_property(self, "position", lunge_pos, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.tween_property(self, "position", original_pos, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -1242,9 +1272,14 @@ func die(killer: Node2D = null) -> void:
 	elif has_node("ActiveOutline"):
 		get_node("ActiveOutline").visible = false
 
-	# Анімація смерті (Темнішає та стає неактивним)
+	# Анімація смерті (Темнішає, падає набік та стає неактивним)
 	var tw = create_tween()
-	tw.tween_property(self, "modulate", Color(0.2, 0.2, 0.2, 0.8), 1.0)
+	tw.set_parallel(true)
+	tw.tween_property(self, "modulate", Color(0.2, 0.2, 0.2, 0.6), 1.0)
+	if _sprite:
+		var fall_angle = deg_to_rad(90.0 if randf() > 0.5 else -90.0)
+		tw.tween_property(_sprite, "rotation", fall_angle, 0.6).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(_sprite, "position:y", 15.0, 0.6)
 	z_index = -1 # Тіло лежить під ногами живих
 
 func _spread_panic_to_allies(radius: int, penalty: int, log_msg: String) -> void:
