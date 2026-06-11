@@ -14,7 +14,7 @@ func _run() -> void:
 
 	print("\n=== Kelly Slab — реальні висоти в Godot ===")
 	print("%-12s %-10s %-10s %-12s %-14s" % ["font_size", "ascent", "descent", "line_height", "label_min_h"])
-	print("-" * 60)
+	print("-".repeat(60))
 
 	for sz in sizes:
 		var ascent  := roundi(font.get_ascent(sz))

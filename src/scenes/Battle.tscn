@@ -128,4 +128,4 @@ cancel_button_text = "Залишитись"
 [node name="UnitPanel" parent="UI" instance=ExtResource("6_panel")]
 
 
-[connection signal="pressed" from="UI/EndTurnButton" to="BattleManager" method="end_unit_turn"]
+[connection signal="pressed" from="UI/EndTurnButton" to="BattleManager" method="_on_end_turn_pressed"]

@@ -399,21 +399,16 @@ func end_unit_turn() -> void:
 			elif _tutorial_step == 5:
 				_tutorial_step = 6
 				_hide_tutorial_panel()
-		# Суворий захист: гравець НЕ може завершити хід за ворога
-		if active_unit.team != 0:
-			# Перевіряємо, чи викликано це не з ШІ
-			# В Godot 4 ми можемо перевірити, чи активний ШІ-контролер
-			# Але поки що використовуємо простішу перевірку
-			var stack = get_stack()
-			if stack.size() > 1:
-				var caller_func = stack[1]["function"]
-				# Якщо викликано з сигналів кнопок (UI), ігноруємо
-				if caller_func == "_on_pressed":
-					return
-
 		completed_units.append(active_unit)
 		active_unit.end_turn()
 	start_next_unit_turn()
+
+# Окремий обробник для кнопки UI: гравець НЕ може завершити хід за ворога.
+# Працює в усіх збірках, на відміну від get_stack(), який в release повертає [].
+func _on_end_turn_pressed() -> void:
+	if active_unit and active_unit.get("team") != 0:
+		return
+	end_unit_turn()
 
 func wait_current_unit() -> void:
 	if active_unit and not active_unit.get("has_waited"):
