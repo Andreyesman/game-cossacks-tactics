@@ -199,7 +199,7 @@ func _update_camera_zoom() -> void:
 # ── Рендер карти ─────────────────────────────────────────────────────────────
 
 func _render_world(state: Dictionary) -> void:
-	_render_biomes(state.get("biomes", []))
+	_render_biomes(state.get("biomes", []))  # biomes arg kept for API compat (ignored internally)
 	_render_water(state.get("rivers", []), state.get("lakes", []))
 	_render_roads(state.get("roads", []))
 	_render_locations(state.get("locations", []))
@@ -401,23 +401,63 @@ var _last_fog_update_radius: float = 0.0
 func _get_biome_at(pos: Vector2) -> String:
 	var cm := get_node_or_null("/root/CampaignManager")
 	if not cm:
-		return "border"
-	var biomes: Array = cm.world_state.get("biomes", [])
-	for biome in biomes:
-		var r = biome.get("rect", {})
-		var rect := Rect2(r.get("x", 0.0), r.get("y", 0.0), r.get("w", 0.0), r.get("h", 0.0))
-		if rect.has_point(pos):
-			return str(biome.get("id", "border"))
-	return "border"
+		return "steppe"
+	var state: Dictionary = cm.world_state
+
+	# 1. Ліси — перевіряємо outer полігон
+	for patch in state.get("forest_patches", []):
+		if patch.has("outer"):
+			var poly := PackedVector2Array()
+			for pt in patch["outer"]:
+				poly.append(Vector2(pt["x"], pt["y"]))
+			if Geometry2D.is_point_in_polygon(pos, poly):
+				return "forest"
+
+	# 2. Болота — перевіряємо verts полігон
+	for patch in state.get("swamp_patches", []):
+		if patch.has("verts"):
+			var poly := PackedVector2Array()
+			for pt in patch["verts"]:
+				poly.append(Vector2(pt["x"], pt["y"]))
+			if Geometry2D.is_point_in_polygon(pos, poly):
+				return "swamp"
+
+	# 3. Пагорби — перевіряємо verts полігон
+	for patch in state.get("hill_patches", []):
+		if patch.has("verts"):
+			var poly := PackedVector2Array()
+			for pt in patch["verts"]:
+				poly.append(Vector2(pt["x"], pt["y"]))
+			if Geometry2D.is_point_in_polygon(pos, poly):
+				return "hill"
+
+	# 4. Кургани — відстань менша за 30px
+	for kurgan in state.get("kurgans", []):
+		if Vector2(kurgan["x"], kurgan["y"]).distance_to(pos) < 30.0:
+			return "kurgan"
+
+	# 5. Яри — відстань менша за 30px до сегментів
+	for ravine in state.get("ravines", []):
+		for i in range(ravine.size() - 1):
+			var a := Vector2(ravine[i]["x"], ravine[i]["y"])
+			var b := Vector2(ravine[i + 1]["x"], ravine[i + 1]["y"])
+			if _dist_to_segment(pos, a, b) < 30.0:
+				return "ravine"
+
+	return "steppe"
 
 func _get_biome_modifier(biome_id: String) -> float:
 	match biome_id:
 		"forest":
 			return 0.7  # -30% дальність огляду в лісі
-		"steppe":
-			return 1.15 # +15% дальність огляду в степу
+		"hill":
+			if is_instance_valid(_player_party) and not _player_party.is_moving:
+				return 1.2  # +20% дальність огляду при зупинці на пагорбі
+			return 1.0
+		"kurgan":
+			return 1.5  # +50% дальність огляду на кургані
 		_:
-			return 1.0  # звичайний огляд на кордоні
+			return 1.0  # звичайний огляд в степу / болоті / яру
 
 func _update_fog_grid(player_pos: Vector2, reveal_radius: float) -> void:
 	if not is_instance_valid(_fog_image):
@@ -519,48 +559,420 @@ func _update_entity_visibility_and_discovery() -> void:
 					marker.visible = true
 
 
-func _render_biomes(biomes: Array) -> void:
-	# Велика фонова підкладка для високих роздільних здатностей (щоб ніколи не було чорних чи сірих полів)
+func _render_biomes(_biomes: Array) -> void:
+	# ── Широкий фон (за межами карти) ─────────────────────────────────────────
 	var huge_bg := ColorRect.new()
 	huge_bg.position = Vector2(-5000, -5000)
 	huge_bg.size = Vector2(10000, 10000)
-	huge_bg.color = C_BG
+	huge_bg.color = Color(0.12, 0.09, 0.06)
 	_biome_layer.add_child(huge_bg)
 
-	# Спочатку суцільний фон
+	# ── Пергаментний фон (шейдер) ─────────────────────────────────────────────
+	var parch_shader := Shader.new()
+	parch_shader.code = """
+shader_type canvas_item;
+uniform vec2 map_size = vec2(3000.0, 2000.0);
+
+float hash(vec2 p) {
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+float noise(vec2 p) {
+	vec2 i = floor(p); vec2 f = fract(p);
+	f = f * f * (3.0 - 2.0 * f);
+	float a = hash(i);
+	float b = hash(i + vec2(1.0, 0.0));
+	float c = hash(i + vec2(0.0, 1.0));
+	float d = hash(i + vec2(1.0, 1.0));
+	return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+float fbm(vec2 p) {
+	float v = 0.0; float a = 0.5;
+	for (int i = 0; i < 5; i++) {
+		v += a * noise(p);
+		p *= 2.1; a *= 0.5;
+	}
+	return v;
+}
+
+void fragment() {
+	vec2 uv = UV;
+	vec2 wp = uv * map_size;
+
+	// Базовий пергаментний колір
+	vec3 base = vec3(0.86, 0.76, 0.52);
+
+	// Зернистість паперу (дрібний шум)
+	float grain = fbm(wp * 0.08) * 0.18 + fbm(wp * 0.22) * 0.09;
+	base += vec3(grain * 0.6, grain * 0.45, grain * 0.18) - 0.07;
+
+	// Плями старіння (великі, рідкі)
+	float stain = fbm(wp * 0.012 + vec2(3.7, 1.2)) * fbm(wp * 0.018 + vec2(0.5, 4.1));
+	stain = smoothstep(0.28, 0.50, stain) * 0.22;
+	base -= vec3(stain * 0.3, stain * 0.12, stain * 0.05);
+
+	// Ефект вигорання на краях (vignette)
+	vec2 vig = uv * 2.0 - 1.0;
+	float vignette = 1.0 - dot(vig, vig) * 0.28;
+	base *= vignette;
+
+	// Легкий мікро-шум (фактура волокна)
+	float fiber = hash(wp * 1.8) * 0.04 - 0.02;
+	base += fiber;
+
+	COLOR = vec4(clamp(base, 0.0, 1.0), 1.0);
+}
+"""
+	var parch_mat := ShaderMaterial.new()
+	parch_mat.shader = parch_shader
+	parch_mat.set_shader_parameter("map_size", Vector2(MAP_W, MAP_H))
+
 	var bg := ColorRect.new()
+	bg.name = "ParchmentBG"
 	bg.position = Vector2.ZERO
 	bg.size = Vector2(MAP_W, MAP_H)
-	bg.color = C_BG
+	bg.color = Color(0.86, 0.76, 0.52)  # fallback якщо шейдер не завантажиться
+	bg.material = parch_mat
 	_biome_layer.add_child(bg)
 
-	for biome in biomes:
-		var r = biome["rect"]
-		var rect := ColorRect.new()
-		rect.position = Vector2(r["x"], r["y"])
-		rect.size = Vector2(r["w"], r["h"])
-		var c = biome["color"]
-		rect.color = Color(c["r"], c["g"], c["b"], c["a"])
-		_biome_layer.add_child(rect)
+	# ── Отримуємо географічні патчі зі стану світу ─────────────────────────────
+	var cm := get_node_or_null("/root/CampaignManager")
+	if not cm:
+		return
+	var state: Dictionary = cm.world_state
 
-		# Назва біому
-		var lbl := Label.new()
-		lbl.text = biome.get("name", "")
-		lbl.position = Vector2(r["x"] + r["w"] / 2.0 - 50.0, r["y"] + 20.0)
-		lbl.add_theme_font_size_override("font_size", 13)
-		lbl.add_theme_color_override("font_color", Color(0.85, 0.78, 0.55, 0.5))
-		_biome_layer.add_child(lbl)
+	_render_geography_patches(state)
+	_render_cartographic_symbols(state)
 
-	# Гарна золотисто-бронзова рамка навколо меж ігрової карти
-	var border := Line2D.new()
-	border.width = 6.0
-	border.default_color = Color(0.65, 0.5, 0.18) # Золотисто-бронзовий
-	border.add_point(Vector2.ZERO)
-	border.add_point(Vector2(MAP_W, 0))
-	border.add_point(Vector2(MAP_W, MAP_H))
-	border.add_point(Vector2(0, MAP_H))
-	border.add_point(Vector2.ZERO)
-	_biome_layer.add_child(border)
+	# ── Декоративна подвійна рамка карти ──────────────────────────────────────
+	# Зовнішня (товста, темна)
+	var border_out := Line2D.new()
+	border_out.width = 7.0
+	border_out.default_color = Color(0.30, 0.20, 0.08)
+	border_out.closed = true
+	border_out.add_point(Vector2(2, 2))
+	border_out.add_point(Vector2(MAP_W - 2, 2))
+	border_out.add_point(Vector2(MAP_W - 2, MAP_H - 2))
+	border_out.add_point(Vector2(2, MAP_H - 2))
+	_biome_layer.add_child(border_out)
+	# Внутрішня (тонка, золота)
+	var border_in := Line2D.new()
+	border_in.width = 2.0
+	border_in.default_color = Color(0.62, 0.46, 0.14, 0.85)
+	border_in.closed = true
+	border_in.add_point(Vector2(10, 10))
+	border_in.add_point(Vector2(MAP_W - 10, 10))
+	border_in.add_point(Vector2(MAP_W - 10, MAP_H - 10))
+	border_in.add_point(Vector2(10, MAP_H - 10))
+	_biome_layer.add_child(border_in)
+	# Кутові марки (маленькі хрестики по кутах)
+	for corner in [Vector2(10, 10), Vector2(MAP_W - 10, 10),
+			Vector2(MAP_W - 10, MAP_H - 10), Vector2(10, MAP_H - 10)]:
+		for is_horiz in [true, false]:
+			var tick := Line2D.new()
+			tick.width = 2.0
+			tick.default_color = Color(0.45, 0.32, 0.10)
+			if is_horiz:
+				tick.add_point(corner + Vector2(-8, 0))
+				tick.add_point(corner + Vector2(8, 0))
+			else:
+				tick.add_point(corner + Vector2(0, -8))
+				tick.add_point(corner + Vector2(0, 8))
+			_biome_layer.add_child(tick)
+
+
+
+# ── Картографічні символи (дерева, пагорби, болото) ─────────────────────────────────
+
+# Символи малюються на окремому шарі (symbol_layer) поверх біомних полігонів.
+var _symbol_layer: Node2D = null
+
+func _render_cartographic_symbols(state: Dictionary) -> void:
+	# Окремий шар для символів
+	_symbol_layer = Node2D.new()
+	_symbol_layer.name = "SymbolLayer"
+	_symbol_layer.z_index = 1
+	_map_root.add_child(_symbol_layer)
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 777  # Фіксований seed — символи розташовані однаково
+
+	# 1. Дерева у лісових патчах
+	for patch in state.get("forest_patches", []):
+		var cx: float = patch["x"]
+		var cy: float = patch["y"]
+		var r: float  = patch["r"]
+		# Кількість дерев пропорційна до площі патчу
+		var num_trees := clampi(int(r * r * 0.00028), 5, 22)
+		for _t in range(num_trees):
+			for _attempt in range(12):
+				var angle := rng.randf() * TAU
+				var dist  := sqrt(rng.randf()) * r * 0.82  # рівномірно по площі
+				var tp := Vector2(cx + cos(angle) * dist, cy + sin(angle) * dist)
+				_draw_tree_symbol(tp)
+				break
+
+	# 2. Штрихування пагорбів
+	for patch in state.get("hill_patches", []):
+		var cx: float = patch["x"]
+		var cy: float = patch["y"]
+		var r: float  = patch["r"]
+		var verts: Array = patch.get("verts", [])
+		if verts.is_empty():
+			continue
+		_draw_hill_hatching(cx, cy, r, verts, rng)
+
+	# 3. Хвилясті лінії для боліт
+	for patch in state.get("swamp_patches", []):
+		var cx: float = patch["x"]
+		var cy: float = patch["y"]
+		var r: float  = patch["r"]
+		_draw_swamp_symbols(cx, cy, r, rng)
+
+# Намалює одне дерево у стилі рукописних карт XVII ст.
+func _draw_tree_symbol(pos: Vector2) -> void:
+	const C_TRUNK  := Color(0.26, 0.17, 0.07, 0.80)
+	const C_CROWN  := Color(0.14, 0.26, 0.09, 0.82)
+	# Стовбур
+	var trunk := Line2D.new()
+	trunk.width = 1.5
+	trunk.default_color = C_TRUNK
+	trunk.add_point(pos + Vector2(0.0,  5.0))
+	trunk.add_point(pos + Vector2(0.0, -1.0))
+	_symbol_layer.add_child(trunk)
+	# Ліва гілка
+	var bl := Line2D.new()
+	bl.width = 1.2; bl.default_color = C_CROWN
+	bl.add_point(pos + Vector2( 0.0, -1.0))
+	bl.add_point(pos + Vector2(-6.0, -7.0))
+	_symbol_layer.add_child(bl)
+	# Права гілка
+	var br := Line2D.new()
+	br.width = 1.2; br.default_color = C_CROWN
+	br.add_point(pos + Vector2(0.0, -1.0))
+	br.add_point(pos + Vector2(6.0, -7.0))
+	_symbol_layer.add_child(br)
+	# Центральна гілка (верхівка)
+	var bc := Line2D.new()
+	bc.width = 1.2; bc.default_color = C_CROWN
+	bc.add_point(pos + Vector2(0.0, -1.0))
+	bc.add_point(pos + Vector2(0.0, -10.0))
+	_symbol_layer.add_child(bc)
+	# Нижня пара гілок (для класичного вигляду)
+	var bl2 := Line2D.new()
+	bl2.width = 1.0; bl2.default_color = C_CROWN
+	bl2.add_point(pos + Vector2( 0.0,  2.0))
+	bl2.add_point(pos + Vector2(-4.5, -2.5))
+	_symbol_layer.add_child(bl2)
+	var br2 := Line2D.new()
+	br2.width = 1.0; br2.default_color = C_CROWN
+	br2.add_point(pos + Vector2(0.0,  2.0))
+	br2.add_point(pos + Vector2(4.5, -2.5))
+	_symbol_layer.add_child(br2)
+
+# Штрихування пагорба паралельними похилими рисками всередині форми.
+func _draw_hill_hatching(cx: float, cy: float, r: float,
+		_verts: Array, rng: RandomNumberGenerator) -> void:
+	const C_HATCH := Color(0.28, 0.20, 0.10, 0.60)
+	# Кількість рядів штрихів — більше для великих пагорбів
+	var num_rows := clampi(int(r * 0.28), 4, 14)
+	for row in range(num_rows):
+		# Відстань від центру (0 = центр, 1 = край)
+		var t := (float(row) + 0.5) / float(num_rows)
+		# Ширина рядку зменшується до краю
+		var half_w := sqrt(1.0 - t * t) * r * 1.2
+		var row_y  := cy - r * 0.6 + t * r * 1.2
+		# Невеликий jitter по Y
+		row_y += rng.randf_range(-3.0, 3.0)
+		# Риска: злегка по ходу від лівого краю до правого
+		var stroke := Line2D.new()
+		stroke.width = lerpf(2.0, 0.8, t)  # Товщіше внизу, тонше вгорі
+		stroke.default_color = C_HATCH
+		stroke.add_point(Vector2(cx - half_w, row_y + 3.0))       # лівий край — нижче
+		stroke.add_point(Vector2(cx,          row_y))              # центр
+		stroke.add_point(Vector2(cx + half_w, row_y + 3.0))       # правий край — нижче
+		_symbol_layer.add_child(stroke)
+
+# Хвилясті горизонтальні лінії — класичний символ болота на старих картах.
+func _draw_swamp_symbols(cx: float, cy: float, r: float,
+		rng: RandomNumberGenerator) -> void:
+	const C_WAVE := Color(0.12, 0.28, 0.20, 0.70)
+	var num_waves := clampi(int(r * 0.18), 3, 10)
+	for _w in range(num_waves):
+		# Випадкова позиція всередині патчу
+		var wx := cx + rng.randf_range(-r * 0.60, r * 0.60)
+		var wy := cy + rng.randf_range(-r * 0.55, r * 0.55)
+		var wave_w := rng.randf_range(10.0, 22.0)
+		# Хвиляста лінія: 4 точки зі змінним Y (sin-подібна)
+		var wave := Line2D.new()
+		wave.width = 1.2
+		wave.default_color = C_WAVE
+		for seg in range(5):
+			var sx := wx - wave_w * 0.5 + (wave_w / 4.0) * float(seg)
+			var sy := wy + sin(float(seg) * PI * 0.5) * 3.0
+			wave.add_point(Vector2(sx, sy))
+		_symbol_layer.add_child(wave)
+
+# ── Процедурний рендер географічних патчів ────────────────────────────────────
+
+func _render_geography_patches(state: Dictionary) -> void:
+	# Кольори
+	const C_FOREST  := Color(0.11, 0.22, 0.09, 0.88)   # Темно-зелений ліс
+	const C_FOREST2 := Color(0.16, 0.32, 0.12, 0.55)   # Прозорі краї лісу
+	const C_HILL    := Color(0.40, 0.31, 0.16, 0.75)   # Хребет пагорбів
+	const C_HILL_HI := Color(0.55, 0.44, 0.22, 0.50)   # Освітлена грань
+	const C_SWAMP   := Color(0.13, 0.21, 0.15, 0.82)   # Болото
+	const C_KURGAN  := Color(0.50, 0.40, 0.22)          # Курган
+	const C_RAVINE  := Color(0.20, 0.14, 0.08, 0.92)   # Яр
+
+	# 1. Ліси — органічні blob з pre-computed вершинами
+	for patch in state.get("forest_patches", []):
+		# Зовнішній прозорий ареол
+		if patch.has("outer"):
+			var outer := _verts_to_poly(patch["outer"], C_FOREST2)
+			_biome_layer.add_child(outer)
+		# Щільне ядро
+		if patch.has("inner"):
+			var inner := _verts_to_poly(patch["inner"], C_FOREST)
+			_biome_layer.add_child(inner)
+
+	# 2. Пагорби — витягнуті хребти з pre-computed вершинами
+	for patch in state.get("hill_patches", []):
+		if patch.has("verts"):
+			var body := _verts_to_poly(patch["verts"], C_HILL)
+			_biome_layer.add_child(body)
+			# Підсвітка гребеня: зменшені вершини (60% розміру відносно центру)
+			var cx: float = patch["x"]
+			var cy: float = patch["y"]
+			var shrunken := []
+			for pt in patch["verts"]:
+				shrunken.append({
+					"x": cx + (pt["x"] - cx) * 0.55,
+					"y": cy + (pt["y"] - cy) * 0.40
+				})
+			var hi := _verts_to_poly(shrunken, C_HILL_HI)
+			_biome_layer.add_child(hi)
+
+	# 3. Болота — аморфні плями
+	for patch in state.get("swamp_patches", []):
+		if patch.has("verts"):
+			var body := _verts_to_poly(patch["verts"], C_SWAMP)
+			_biome_layer.add_child(body)
+
+	# 4. Кургани — маленький горбик + хрестик/риска
+	for k in state.get("kurgans", []):
+		var kp := Vector2(k["x"], k["y"])
+		var kpoly := _make_circle_poly(kp, 9.0, 8, C_KURGAN)
+		_biome_layer.add_child(kpoly)
+		# Горизонтальна риска (символ кургану)
+		var tick := Line2D.new()
+		tick.width = 2.0
+		tick.default_color = Color(0.20, 0.13, 0.05)
+		tick.add_point(kp + Vector2(-7, 0))
+		tick.add_point(kp + Vector2(7, 0))
+		_biome_layer.add_child(tick)
+
+	# 5. Яри — меандруючі лінії з двома шарами
+	for ravine in state.get("ravines", []):
+		if ravine.size() < 2:
+			continue
+		# Основна лінія (товста, темна)
+		var rl := Line2D.new()
+		rl.width = 5.0
+		rl.default_color = C_RAVINE
+		for pt in ravine:
+			rl.add_point(Vector2(pt["x"], pt["y"]))
+		_biome_layer.add_child(rl)
+		# Паралельна тінь (трохи зміщена)
+		var rl2 := Line2D.new()
+		rl2.width = 2.0
+		rl2.default_color = Color(0.35, 0.26, 0.16, 0.60)
+		for pt in ravine:
+			rl2.add_point(Vector2(pt["x"] + 4, pt["y"] + 4))
+		_biome_layer.add_child(rl2)
+
+# ── Конвертер масиву вершин → Polygon2D ───────────────────────────────────────
+
+func _verts_to_poly(verts_arr: Array, color: Color) -> Polygon2D:
+	var poly := Polygon2D.new()
+	poly.color = color
+	var v := PackedVector2Array()
+	for pt in verts_arr:
+		v.append(Vector2(pt["x"], pt["y"]))
+	poly.polygon = v
+	return poly
+
+
+# ── Допоміжні геометричні методи ─────────────────────────────────────────────
+
+func _make_circle_poly(center: Vector2, radius: float, points: int, color: Color) -> Polygon2D:
+	var poly := Polygon2D.new()
+	poly.color = color
+	var verts := PackedVector2Array()
+	for i in range(points):
+		var angle := float(i) / float(points) * TAU
+		verts.append(center + Vector2(cos(angle), sin(angle)) * radius)
+	poly.polygon = verts
+	return poly
+
+func _make_ellipse_poly(center: Vector2, rx: float, ry: float, points: int, color: Color) -> Polygon2D:
+	var poly := Polygon2D.new()
+	poly.color = color
+	var verts := PackedVector2Array()
+	for i in range(points):
+		var angle := float(i) / float(points) * TAU
+		verts.append(center + Vector2(cos(angle) * rx, sin(angle) * ry))
+	poly.polygon = verts
+	return poly
+
+# ── Запит поточного терейна гравця / зони впливу ─────────────────────────────
+
+## Повертає множник швидкості руху для позиції pos.
+## 1.0 = нормальна; < 1.0 = сповільнення; > 1.0 = прискорення.
+func get_terrain_speed_modifier(pos: Vector2) -> float:
+	var biome := _get_biome_at(pos)
+	match biome:
+		"forest":
+			return 0.70  # -30% швидкість у лісі
+		"swamp":
+			return 0.50  # -50% швидкість у болоті
+		"hill":
+			return 0.60  # -40% швидкість на пагорбах
+		"ravine":
+			return 0.40  # -60% швидкість в ярах (багнах) або обхід
+		_:
+			return 1.0   # Степ/Курган — звичайна швидкість
+
+## Повертає назву фракції, яка контролює точку pos (Voronoi за найближчим містом).
+func get_faction_at(pos: Vector2) -> String:
+	var cm = get_node_or_null("/root/CampaignManager")
+	if not cm:
+		return "none"
+	var state = cm.get("world_state")
+	if not state is Dictionary:
+		return "none"
+	var anchors: Array = state.get("influence_anchors", [])
+	if anchors.is_empty():
+		return "none"
+	var best_faction := "none"
+	var best_dist := INF
+	for anchor: Dictionary in anchors:
+		var pos_dict: Dictionary = anchor.get("pos", {})
+		var ap := Vector2(pos_dict.get("x", 0.0), pos_dict.get("y", 0.0))
+		var d := pos.distance_to(ap)
+		if d < best_dist:
+			best_dist = d
+			best_faction = str(anchor.get("faction", "none"))
+	return best_faction
+
+func _dist_to_segment(p: Vector2, a: Vector2, b: Vector2) -> float:
+	var ab: Vector2 = b - a
+	var len_sq: float = ab.dot(ab)
+	if len_sq < 0.0001:
+		return p.distance_to(a)
+	var t: float = clampf((p - a).dot(ab) / len_sq, 0.0, 1.0)
+	return p.distance_to(a + ab * t)
 
 func _render_water(rivers: Array, lakes: Array) -> void:
 	for river_pts in rivers:

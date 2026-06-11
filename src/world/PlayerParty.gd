@@ -41,10 +41,16 @@ func _process(delta: float) -> void:
 		return
 
 	var dir := (target_position - position).normalized()
-	position += dir * SPEED * speed_multiplier * delta
+	position += dir * SPEED * speed_multiplier * get_terrain_speed_mod() * delta
 
 	# Перевірка зустрічей з ворожими загонами
 	_check_encounters()
+
+func get_terrain_speed_mod() -> float:
+	var world_map = get_parent().get_parent()
+	if world_map and world_map.has_method("get_terrain_speed_modifier"):
+		return world_map.get_terrain_speed_modifier(position)
+	return 1.0
 
 func set_target(world_pos: Vector2) -> void:
 	pursuit_target = null

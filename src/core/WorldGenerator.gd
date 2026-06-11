@@ -24,9 +24,140 @@ func generate(state: Dictionary) -> void:
 
 	_gen_biomes(state)
 	_gen_water(state, rng)
+	_gen_geography(state, rng)
 	_gen_locations(state, rng)
 	_gen_roads(state)
 	_gen_parties(state, rng)
+	_gen_influence_zones(state)
+
+# ── Процедурна Географія ──────────────────────────────────────────────────────
+
+func _gen_geography(state: Dictionary, rng: RandomNumberGenerator) -> void:
+	var forest_patches: Array = []
+	var hill_patches: Array = []
+	var swamp_patches: Array = []
+	var kurgans: Array = []
+	var ravines: Array = []
+
+	# 1. Ліси — органічні нерівні blob-полігони
+	# Густіші на заході, рідшають на сході
+	var num_forests := rng.randi_range(16, 24)
+	for _i in range(num_forests):
+		var cx := 0.0
+		var cy := rng.randf_range(100.0, MAP_H - 100.0)
+		var r := rng.randf_range(120.0, 260.0)
+		var roll := rng.randf()
+		if roll < 0.60:
+			cx = rng.randf_range(100.0, MAP_W * 0.38)
+		elif roll < 0.90:
+			cx = rng.randf_range(MAP_W * 0.38, MAP_W * 0.76)
+		else:
+			cx = rng.randf_range(MAP_W * 0.76, MAP_W - 100.0)
+		# Зовнішній контур: 22 вершини, roughness 0.38 → зазубрені краї
+		var outer_verts := _blob_poly(rng, cx, cy, r, 22, 0.38, 1.0, 1.0)
+		# Внутрішнє ядро: трохи менший blob
+		var inner_verts := _blob_poly(rng, cx, cy, r * 0.62, 18, 0.30, 1.0, 1.0)
+		forest_patches.append({
+			"x": cx, "y": cy, "r": r,
+			"outer": outer_verts, "inner": inner_verts
+		})
+
+	# 2. Пагорби — витягнуті хребти під кутом
+	var num_hills := rng.randi_range(8, 14)
+	for _i in range(num_hills):
+		var cx := rng.randf_range(100.0, MAP_W - 100.0)
+		var cy := rng.randf_range(100.0, MAP_H - 100.0)
+		var r := rng.randf_range(100.0, 200.0)
+		# Хребет: витягнутий у 2-3x по осі X відносно Y, повернутий на довільний кут
+		var ridge_angle := rng.randf_range(0.0, TAU)
+		var rx := r * rng.randf_range(1.8, 2.8)  # довжина хребта
+		var ry := r * rng.randf_range(0.4, 0.7)  # ширина хребта
+		var verts := _ridge_poly(rng, cx, cy, rx, ry, ridge_angle, 16, 0.22)
+		hill_patches.append({
+			"x": cx, "y": cy, "r": r,
+			"verts": verts
+		})
+
+	# 3. Болота — аморфні, нерівні, biased до води
+	var num_swamps := rng.randi_range(6, 10)
+	for _i in range(num_swamps):
+		var cx := 0.0
+		var cy := 0.0
+		var r := rng.randf_range(80.0, 160.0)
+		var ok := false
+		if state.has("rivers") and not state["rivers"].is_empty():
+			var river = state["rivers"][rng.randi() % state["rivers"].size()]
+			var pt = river[rng.randi() % river.size()]
+			cx = pt["x"] + rng.randf_range(-120.0, 120.0)
+			cy = pt["y"] + rng.randf_range(-120.0, 120.0)
+			ok = true
+		elif state.has("lakes") and not state["lakes"].is_empty():
+			var lake = state["lakes"][rng.randi() % state["lakes"].size()]
+			var pt = lake[rng.randi() % lake.size()]
+			cx = pt["x"] + rng.randf_range(-100.0, 100.0)
+			cy = pt["y"] + rng.randf_range(-100.0, 100.0)
+			ok = true
+		if not ok:
+			cx = rng.randf_range(150.0, MAP_W - 150.0)
+			cy = rng.randf_range(150.0, MAP_H - 150.0)
+		# Болото: висока нерівність (roughness 0.48), асиметричне масштабування
+		var sx := rng.randf_range(0.8, 1.4)
+		var sy := rng.randf_range(0.6, 1.2)
+		var verts := _blob_poly(rng, cx, cy, r, 16, 0.48, sx, sy)
+		swamp_patches.append({
+			"x": cx, "y": cy, "r": r,
+			"verts": verts
+		})
+
+	# 4. Кургани — точки (насправді невеликі горбики, залишаємо як маркери)
+	var num_kurgans := rng.randi_range(4, 7)
+	for _i in range(num_kurgans):
+		var cx := rng.randf_range(150.0, MAP_W - 150.0)
+		var cy := rng.randf_range(150.0, MAP_H - 150.0)
+		kurgans.append({"x": cx, "y": cy})
+
+	# 5. Яри — природній меандр: 10+ точок з перпендикулярним відхиленням
+	var num_ravines := rng.randi_range(3, 5)
+	for _i in range(num_ravines):
+		var rsx := rng.randf_range(200.0, MAP_W - 200.0)
+		var rsy := rng.randf_range(200.0, MAP_H - 200.0)
+		var rangle := rng.randf_range(0.0, PI)
+		var rlength := rng.randf_range(200.0, 380.0)
+		var num_seg := 10
+		var rpts := []
+		var perp_x := cos(rangle + PI * 0.5)
+		var perp_y := sin(rangle + PI * 0.5)
+		for j in range(num_seg + 1):
+			var t := float(j) / float(num_seg)
+			var bx := rsx + cos(rangle) * rlength * t
+			var by := rsy + sin(rangle) * rlength * t
+			var jitter := rng.randf_range(-35.0, 35.0) * sin(t * PI)
+			rpts.append({
+				"x": bx + perp_x * jitter,
+				"y": by + perp_y * jitter
+			})
+		ravines.append(rpts)
+
+	state["forest_patches"] = forest_patches
+	state["hill_patches"] = hill_patches
+	state["swamp_patches"] = swamp_patches
+	state["kurgans"] = kurgans
+	state["ravines"] = ravines
+
+# ── Зони впливу фракцій (невидимі, логічні) ──────────────────────────────────
+
+# Будує список anchor-точок {pos, faction} — по одній на кожне місто.
+# WorldMap / CampaignManager можуть викликати get_faction_at(pos) через Voronoi-lookup.
+func _gen_influence_zones(state: Dictionary) -> void:
+	var anchors: Array = []
+	var locations: Array = state.get("locations", [])
+	for loc in locations:
+		if loc.get("type", "") == "town":
+			anchors.append({
+				"faction": loc.get("faction", "none"),
+				"pos": loc["pos"]
+			})
+	state["influence_anchors"] = anchors
 
 # ── Біоми (3 фіксованих зони) ─────────────────────────────────────────────────
 
@@ -406,3 +537,57 @@ func _find_free_pos(rng: RandomNumberGenerator, bounds: Rect2,
 		if ok:
 			return candidate
 	return Vector2.ZERO
+
+# ── Генератори органічних форм ────────────────────────────────────────────────
+
+# Нерівний blob-полігон навколо (cx, cy).
+# roughness: 0.0 = правильне коло, 0.5 = дуже нерівний
+# rx_scale/ry_scale: масштаб по осях (для асиметрії болота)
+func _blob_poly(rng: RandomNumberGenerator, cx: float, cy: float,
+		base_r: float, n: int, roughness: float,
+		rx_scale: float, ry_scale: float) -> Array:
+	# Генеруємо радіуси з шумом
+	var radii: Array[float] = []
+	for _j in range(n):
+		radii.append(base_r * rng.randf_range(1.0 - roughness, 1.0 + roughness * 0.6))
+	# Один прохід згладжування (moving average) → органічний силует
+	var smoothed: Array[float] = []
+	for k in range(n):
+		var prev: float = radii[(k - 1 + n) % n]
+		var curr: float = radii[k]
+		var nxt: float  = radii[(k + 1) % n]
+		smoothed.append((prev + curr * 2.0 + nxt) / 4.0)
+	# Будуємо вершини з невеликим кутовим jitter
+	var pts := []
+	for m in range(n):
+		var base_angle := float(m) / float(n) * TAU
+		var angle_jitter := (TAU / float(n)) * rng.randf_range(-0.25, 0.25)
+		var a := base_angle + angle_jitter
+		var sr: float = smoothed[m]
+		pts.append({
+			"x": cx + cos(a) * sr * rx_scale,
+			"y": cy + sin(a) * sr * ry_scale
+		})
+	return pts
+
+# Витягнутий хребет (для пагорбів): еліпс під кутом ridge_angle з roughness
+func _ridge_poly(rng: RandomNumberGenerator, cx: float, cy: float,
+		rx: float, ry: float, ridge_angle: float,
+		n: int, roughness: float) -> Array:
+	var pts := []
+	var jitter_scale := sqrt(rx * ry) * roughness
+	for i in range(n):
+		var base_angle := float(i) / float(n) * TAU
+		var lx := cos(base_angle) * rx
+		var ly := sin(base_angle) * ry
+		# Поворот на ridge_angle
+		var world_x := lx * cos(ridge_angle) - ly * sin(ridge_angle)
+		var world_y := lx * sin(ridge_angle) + ly * cos(ridge_angle)
+		# Перпендикулярний jitter
+		var perp_angle := base_angle + PI * 0.5
+		var jitter := rng.randf_range(-0.5, 0.5) * jitter_scale
+		pts.append({
+			"x": cx + world_x + cos(perp_angle) * jitter,
+			"y": cy + world_y + sin(perp_angle) * jitter
+		})
+	return pts
