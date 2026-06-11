@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/hammer_strike.tres" id="1_strike"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="2_script"]
+[resource]
+script = ExtResource("2_script")
+name = "Чекан / Клевець"
+type = 3
+damage_min = 30
+damage_max = 40
+armor_penetration = 0.7
+armor_damage_modifier = 1.5
+shield_damage_modifier = 1.0
+weapon_range = 1
+weight = 10
+initiative_penalty = -5
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_strike")])
+is_two_handed = false

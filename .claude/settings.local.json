@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(xargs cat)",
+      "Bash(file /Users/andrii/Downloads/goddot-\\\\\\(cossacks-tactics-2.1\\\\\\)/ui/imports/MainMenu/images/*.png)",
+      "Bash(curl -s \"https://fonts.googleapis.com/css2?family=Ruslan+Display&display=swap\" -H \"User-Agent: Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "Bash(curl -s \"https://fonts.googleapis.com/css2?family=Kelly+Slab&display=swap\" -H \"User-Agent: Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\")",
+      "Bash(curl -L -o \"/Users/andrii/Downloads/goddot-\\(cossacks-tactics-2.1\\)/assets/fonts/RuslanDisplay-Regular.ttf\" \"https://fonts.gstatic.com/s/ruslandisplay/v27/Gw6jwczl81XcIZuckK_e3Upfdzxr.ttf\")",
+      "Bash(curl -L -o \"/Users/andrii/Downloads/goddot-\\(cossacks-tactics-2.1\\)/assets/fonts/KellySlab-Regular.ttf\" \"https://fonts.gstatic.com/s/kellyslab/v18/-W_7XJX0Rz3cxUnJC5t6TkM.ttf\")",
+      "Bash(ls /tmp/ | grep -i \"png\\\\|jpg\\\\|image\" | head -10; ls ~/Downloads/*.png 2>/dev/null | head -5)",
+      "Read(//private/tmp/**)",
+      "Read(//Users/andrii/Downloads/**)",
+      "Bash(cp \"/Users/andrii/Downloads/Gemini_Generated_Image_vrll4zvrll4zvrll.png\" \"/Users/andrii/Downloads/goddot-\\(cossacks-tactics-2.1\\)/assets/ui/menu_background.png\")",
+      "Bash(grep -rn '\"\\\\| AP\\\\|AP \\\\|AP\"\\\\| AP$\\\\|\"AP' /Users/andrii/Downloads/goddot-\\\\\\(cossacks-tactics-2.1\\\\\\)/src/ --include=\"*.gd\")",
+      "WebSearch",
+      "WebFetch(domain:www.gameuidatabase.com)",
+      "WebFetch(domain:www.gamedeveloper.com)",
+      "WebFetch(domain:divinity.fandom.com)",
+      "WebFetch(domain:medium.com)",
+      "Read(//Users/andrii/.claude/**)",
+      "Bash(python3 -m json.tool)",
+      "Read(//Users/andrii/**)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); mcps=d.get\\('mcpServers',{}\\); [print\\(k,'->',v.get\\('command',''\\),v.get\\('args',''\\)\\) for k,v in mcps.items\\(\\)]\")",
+      "Bash(xargs ls -lh)",
+      "Bash(grep -E \"\\\\.\\(gd|tscn|tres\\)$\")",
+      "Bash(python3 -)",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: 3ddccd94ba534e87beb1bcf70cc4c1fa' -d '{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_manage\",\"arguments\":{\"op\":\"list\"}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: 3ddccd94ba534e87beb1bcf70cc4c1fa' -d '{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"test_run\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\",\"scene\":\"res://test/TestIsoMath.tscn\"}}}')",
+      "Bash(python3 -c \"import sys,json; d=json.loads\\(sys.stdin.read\\(\\).replace\\('data: ','',1\\)\\); print\\(d['result']['content'][0]['text']\\)\")",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: 3ddccd94ba534e87beb1bcf70cc4c1fa' -d '{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"project_run\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\",\"scene\":\"res://test/TestIsoMath.tscn\"}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: __TRACKED_VAR__' -d '{\"jsonrpc\":\"2.0\",\"id\":5,\"method\":\"tools/call\",\"params\":{\"name\":\"logs_read\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\",\"lines\":40}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: 3ddccd94ba534e87beb1bcf70cc4c1fa' -d '{\"jsonrpc\":\"2.0\",\"id\":6,\"method\":\"tools/call\",\"params\":{\"name\":\"logs_read\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\"}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: __TRACKED_VAR__' -d '{\"jsonrpc\":\"2.0\",\"id\":7,\"method\":\"tools/call\",\"params\":{\"name\":\"editor_manage\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\",\"op\":\"logs_clear\"}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: __TRACKED_VAR__' -d '{\"jsonrpc\":\"2.0\",\"id\":9,\"method\":\"tools/call\",\"params\":{\"name\":\"logs_read\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\",\"source\":\"stdout\"}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: 3ddccd94ba534e87beb1bcf70cc4c1fa' -d '{\"jsonrpc\":\"2.0\",\"id\":10,\"method\":\"tools/call\",\"params\":{\"name\":\"logs_read\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\",\"source\":\"all\"}}}')",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -H 'mcp-session-id: 3ddccd94ba534e87beb1bcf70cc4c1fa' -d '{\"jsonrpc\":\"2.0\",\"id\":11,\"method\":\"tools/call\",\"params\":{\"name\":\"editor_state\",\"arguments\":{\"session_id\":\"goddot-cossacks-tactics-2-1@b008\"}}}')",
+      "Bash(/Applications/Godot.app/Contents/MacOS/Godot --path '/Users/andrii/Downloads/goddot-\\(cossacks-tactics-2.1\\)' --headless --scene res://test/TestIsoMath.tscn --quit-after 5)",
+      "Bash(cd /Users/andrii/Downloads/goddot-\\\\\\(cossacks-tactics-2.1\\\\\\) && grep -n \"UNUSED_PRIVATE\\\\|not declared\\\\|not found in base\\\\|Cannot infer\" /dev/null 2>&1; echo \"checking diagnostics via grep on file...\" && grep -n \"_toggle_inventory\\\\|_build_inventory_panel\\\\|_refresh_inventory_panel\\\\|_is_at_settlement\\\\|_show_equip_popup\\\\|_on_sell_item\\\\|_style_inv_btn\\\\|_inventory_panel\\\\|_inventory_items_vbox\\\\|_inventory_btn\" src/ui/WorldMap.gd | head -40)",
+      "Read(//dev/**)",
+      "mcp__figma-desktop__get_design_context",
+      "mcp__figma-desktop__get_screenshot",
+      "mcp__figma-desktop__get_metadata"
+    ],
+    "additionalDirectories": [
+      "/Users/andrii/Downloads"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "godot"
+  ]
+}

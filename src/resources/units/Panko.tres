@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/warhammer.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Панько"
+background = "Важкоозброєний"
+base_hp = 95
+base_stamina = 75
+base_melee_skill = 65
+base_ranged_skill = 25
+base_melee_defense = 10
+base_ranged_defense = 8
+base_body_armor = 30
+base_initiative = 42
+base_resolve = 60
+star_hp = 1
+star_melee = 1
+star_defense = 0
+origin_name = "Найманець"
+origin_trait = "Броньована стіна"
+origin_bonus = "+10 HP, +30 Броня тіла"
+xp_reward = 50
+default_weapon = ExtResource("2_weapon")

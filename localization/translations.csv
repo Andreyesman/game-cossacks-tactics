@@ -1,0 +1,364 @@
+keys,uk,en
+UI_NEW_GAME,Нова гра,New Game
+UI_CONTINUE,Продовжити,Continue
+UI_SETTINGS,Налаштування,Settings
+UI_EXIT,Вийти,Exit
+UI_CLOSE,Закрити,Close
+UI_MUSIC_VOLUME,Музика,Music
+UI_SFX_VOLUME,Звуки,Sounds
+UI_END_TURN,Завершити хід,End Turn
+UI_DAY,День,Day
+UI_PROVISIONS,Провізії,Provisions
+UI_THALERS,Талери,Thalers
+UI_REPUTATION,Репутація,Reputation
+UI_SQUAD,Загін,Squad
+UI_INVENTORY,Інвентар,Inventory
+UI_EQUIPMENT,Спорядження,Equipment
+UI_SELL,Продати,Sell
+UI_BUY,Купити,Buy
+UI_EQUIP,Озброїти,Equip
+UI_UNEQUIP,Зняти,Unequip
+UI_HIRE,Найняти,Hire
+UI_HEAL,Лікувати,Heal
+UI_LEAVE,Покинути,Leave
+UI_ATTACK,Атакувати,Attack
+UI_AVOID,Уникнути,Avoid
+UI_TALK,Говорити,Talk
+UI_SKIP_TUTORIAL,Пропустити,Skip
+UI_PAUSE,Пауза,Pause
+UI_SPEED_NORMAL,Звичайна швидкість,Normal speed
+UI_SPEED_FAST,Подвійна швидкість,Double speed
+UI_WAIT,Чекати,Wait
+UI_EMPTY_SLOT,— порожньо —,— empty —
+UI_INVENTORY_EMPTY,Інвентар порожній,Inventory empty
+BATTLE_STARTED,БИТВА ПОЧАЛАСЯ (Раунд %d),BATTLE STARTED (Round %d)
+BATTLE_UNIT_TURN,Хід юніта: %s (%s),Unit turn: %s (%s)
+BATTLE_VICTORY,ПЕРЕМОГА! Ворогів розбито!,VICTORY! Enemies defeated!
+BATTLE_DEFEAT,ПОРАЗКА. Усі козаки загинули...,DEFEAT. All cossacks have fallen...
+BATTLE_ROUND,РАУНД %d,ROUND %d
+BATTLE_HIT,%s вдарив %s на %d HP,%s hit %s for %d HP
+BATTLE_MISS,%s промахнувся по %s,%s missed %s
+BATTLE_DEATH,%s загинув,%s has fallen
+BATTLE_RECOVER,ВІДПОЧИНОК,REST
+BATTLE_RIPOSTE,КОНТРУДАР!,RIPOSTE!
+BATTLE_RALLY,ЗГУРТУВАННЯ!,RALLY!
+BATTLE_RETREAT,ВІДСТУП!,RETREAT!
+BATTLE_FLEE,ВТЕЧА!,FLEEING!
+BATTLE_INTERCEPT,ПЕРЕХОПЛЕННЯ!,INTERCEPT!
+BATTLE_SHOT,ПОСТРІЛ!,SHOT!
+BATTLE_LOADED,Заряджено,Loaded
+MORALE_CONFIDENT,Впевнений,Confident
+MORALE_STEADY,Спокійний,Steady
+MORALE_WAVERING,Вагається,Wavering
+MORALE_BREAKING,Паніка,Breaking
+MORALE_FLEEING,Втеча,Fleeing
+MAP_TRADE,Торгівля,Trade
+MAP_SHOP,Крамниця,Shop
+MAP_HIRING,Найм,Hiring
+MAP_PROVISIONS,Провізія,Provisions
+MAP_HEALING,Лікування,Healing
+MAP_ALL_HEALTHY,усі здорові,all healthy
+MAP_INJURED,%d поран.,%d injured
+MAP_LOCATION_CLEARED,Місце вже очищено.,Location already cleared.
+MAP_SETTLEMENT_OPEN,Поселення відкрите для торгівлі.,Settlement open for trade.
+MAP_NOT_ENOUGH,Недостатньо талерів!,Not enough thalers!
+MAP_DESERTED,%s дезертирував з голоду!,%s deserted from hunger!
+STAT_HP,Здоров'я,Health
+STAT_AP,Очки дії,Action Points
+STAT_STAMINA,Витривалість,Stamina
+STAT_ARMOR,Броня,Armor
+STAT_HELMET,Шолом,Helmet
+STAT_MELEE,Ближній бій,Melee
+STAT_RANGED,Дальній бій,Ranged
+STAT_DEFENSE_MELEE,Захист (бл.),Defense (melee)
+STAT_DEFENSE_RANGED,Захист (дал.),Defense (ranged)
+STAT_INITIATIVE,Ініціатива,Initiative
+STAT_RESOLVE,Рішучість,Resolve
+STAT_LEVEL,Рівень,Level
+FACTION_CROWN,Корона,Crown
+FACTION_SICH,Січ,Sich
+FACTION_ORDA,Орда,Horde
+TEAM_COSSACK,Козак,Cossack
+TEAM_ENEMY,Ворог,Enemy
+HINT_MOVE,Клікніть на карту щоб рухатись. Доба проходить під час руху.,Click on the map to move. Day passes while moving.
+HINT_ENEMY,Бандити! Атакуйте або спробуйте уникнути.,Bandits! Attack or try to avoid.
+HINT_SETTLEMENT,У поселенні можна торгувати лікуватись і наймати козаків.,In settlement you can trade heal and hire cossacks.
+HINT_WOUNDED,Поранені козаки. Лікуйте в найближчому поселенні.,Wounded cossacks. Heal at nearest settlement.
+HINT_LOW_FOOD,Провізії закінчуються! Купіть у поселенні.,Provisions running low! Buy at settlement.
+TUTORIAL_STEP1,Це ваш загін. Оберіть навичку атаки на панелі знизу.,This is your squad. Choose an attack skill on the panel below.
+TUTORIAL_STEP2,Тепер клікніть на ворога в зоні дії щоб атакувати.,Now click on an enemy in the action zone to attack.
+TUTORIAL_STEP3,Влучили! Залишились очки дій — можна рухатись або атакувати знову.,Hit! Action points remain — you can move or attack again.
+TUTORIAL_STEP4,Тепер ходить ворог. Спостерігайте.,Now the enemy moves. Watch.
+TUTORIAL_STEP5,Ваш хід! Рухайтесь клікнувши на жовту клітинку атакуйте ворогів.,Your turn! Move by clicking yellow tile and attack enemies.
+COMBAT_HINT_FIRST,Клікніть на ворога в зоні атаки щоб вдарити. ПКМ скасовує навичку.,Click on enemy in attack zone to strike. RMB cancels skill.
+COMBAT_HINT_STAMINA,Витривалість низька — використайте Відпочинок для відновлення.,Stamina low — use Rest to recover.
+COMBAT_HINT_MORALE,Мораль падає! Згуртування (Rally) може допомогти.,Morale dropping! Rally can help.
+COMBAT_HINT_ZOC,Вихід із зони контролю ворога дає йому безкоштовну атаку.,Leaving enemy control zone gives them a free attack.
+COMBAT_HINT_RELOAD,Після пострілу мушкет треба перезарядити.,After shooting the musket must be reloaded.
+TERRAIN_BUSHES,Чагарники,Bushes
+TERRAIN_SWAMP,Болото,Swamp
+TERRAIN_WATER,Брід,Ford
+TERRAIN_ROCKS,Каміння,Rocks
+TERRAIN_TREES,Дерево,Tree
+LOC_TYPE_BANDIT_CAMP,Табір розбійників,Bandit camp
+LOC_TYPE_TATAR_CAMP,Татарський кіш,Tatar camp
+LOC_TYPE_CROWN_OUTPOST,Прикордонний форпост,Border outpost
+LOC_TYPE_RUINS,Руїни,Ruins
+LOC_TYPE_TOWN,Місто,Town
+LOC_TYPE_VILLAGE,Село,Village
+ENEMY_BANDIT,Бандит,Bandit
+ENEMY_BANDIT_LEADER,Ватажок,Leader
+ENEMY_TATAR,Татарин,Tatar
+ENEMY_TATAR_HEAVY,Важкий татарин,Heavy tatar
+ENEMY_JANISSARY,Яничар,Janissary
+ENEMY_REIESTR,Реєстровий,Registered
+UI_SKILLS,Навички,Skills
+UI_WAIT_TOOLTIP,Пропустити хід походити пізніше.,Skip turn act later.
+BATTLE_MISS_SHORT,ПРОМАХ,MISS
+BATTLE_HEADSHOT,ГОЛОВА!,HEADSHOT!
+BATTLE_RETREAT_TACTICAL,ВІДХІД,RETREAT
+SLOT_TRINKET,Прикраса,Trinket
+SLOT_AMMO,Набої,Ammo
+SLOT_SHIELD,Щит,Shield
+SLOT_BELT,Пояс,Belt
+STAT_MORALE,Мораль,Morale
+SLOT_WEAPON,Зброя,Weapon
+ENCOUNTER_REWARD,Здобич: ~%d талерів,Loot: ~%d thalers
+LOC_ABANDONED_RUINS,Занедбані руїни,Abandoned Ruins
+LOC_ABANDONED_APIARY,Покинута пасіка,Abandoned Apiary
+LOC_BANDIT_CAVE,Печера розбійників,Bandit Cave
+LOC_MURZA_CAMP,Ставка мурзи,Murza's Camp
+LOC_SCYTHIAN_TOMB,Скіфська могила,Scythian Tomb
+LOC_COSSACK_CEMETERY,Козацький цвинтар,Cossack Cemetery
+LOC_TATAR_PATROL,Татарський дозор,Tatar Patrol
+LOC_FORTRESS,Фортеця,Fortress
+LOC_RUINED_CHURCH,Зруйнований костел,Ruined Church
+LOC_PAGAN_RAVINE,Яр язичників,Pagan Ravine
+CLEARED_BANDIT_CAMP,"Табір розбійників розгромлено.\nМісце спустіло.","Bandit camp destroyed.\nThe place is deserted."
+CLEARED_TATAR_CAMP,"Татарський кіш знищено.\nВижиті відступили.","Tatar camp destroyed.\nSurvivors retreated."
+CLEARED_RUINS,"Руїни обшукано.\nТут більше нема чого шукати.","Ruins searched.\nNothing left to find."
+CLEARED_CROWN_OUTPOST,"Застава була взята штурмом.\nВояки розбіглися.","Outpost stormed.\nSoldiers scattered."
+CLEARED_FORTRESS,"Фортецю підкорено.\nОборонці капітулювали.","Fortress conquered.\nDefenders surrendered."
+FACTION_ORDA_PLURAL,Татари,Tatars
+FACTION_CROWN_PLURAL,Реєстрові,Registered
+FACTION_SICH_PLURAL,Запорожці,Zaporozhians
+FACTION_BANDITS,Бандити,Bandits
+UI_LANGUAGE,Мова,Language
+GAME_TITLE,КОЗАЦЬКА ВАРТА,COSSACK GUARD
+MAP_OPEN_FIELD,Відкрите поле,Open Field
+MAP_DISCOVERED,Виявлено локацію: %s!,Location discovered: %s!
+ORIGIN_UNKNOWN,Невідоме походження,Unknown origin
+DAMAGE_SLASH,Ріжуча,Slashing
+DAMAGE_PIERCE,Колюча,Piercing
+DAMAGE_BLUNT,Дробяча,Blunt
+DAMAGE_FIRE,Вогняна,Fire
+DAMAGE_RANGED,Дальня,Ranged
+SKILL_TOOLTIP_TYPE,Тип: %s,Type: %s
+SKILL_TOOLTIP_HIT,Точність: %+d%%,Accuracy: %+d%%
+SKILL_TOOLTIP_HEAD_BONUS,Шанс в голову: %+d%%,Head chance: %+d%%
+SKILL_TOOLTIP_GUARANTEED_HEAD,Гарантований удар в голову!,Guaranteed headshot!
+Без зброї,Без зброї,No Weapon
+Козацька Шабля,Козацька Шабля,Cossack Saber
+Яничарка,Яничарка,Janissary Musket
+Піка,Піка,Pike
+Бердиш (2H),Бердиш (2H),Bardiche (2H)
+Бойова Сокира,Бойова Сокира,Battle Axe
+Пластунський лук,Пластунський лук,Scout Bow
+Кинджал (Засапожний),Кинджал (Засапожний),Dagger
+Обушок / Ціп,Обушок / Ціп,Flail
+"Мушкет «Яничарка»","Мушкет «Яничарка»",Janissary Musket
+Сулиця (дротик),Сулиця (дротик),Javelin
+Спис,Спис,Spear
+Чекан / Клевець,Чекан / Клевець,War Hammer
+Удар шаблею,Удар шаблею,Saber Strike
+Відповідь,Відповідь,Riposte
+Постріл з лука,Постріл з лука,Bow Shot
+Проламати броню,Проламати броню,Break Armor
+Удар чеканом,Удар чеканом,Hammer Strike
+Обушок,Обушок,Mace
+Постріл,Постріл,Shot
+Прокол,Прокол,Puncture
+Круговий розмах,Круговий розмах,Round Swing
+Стіна списів,Стіна списів,Spear Wall
+Розбити щит,Розбити щит,Split Shield
+Замах,Замах,Swing
+Метання,Метання,Throw
+Випад,Випад,Thrust
+Відпочинок,Відпочинок,Rest
+Перезарядити,Перезарядити,Reload
+Укол списом,Укол списом,Spear Thrust
+Важкий удар,Важкий удар,Heavy Strike
+Контрудар,Контрудар,Riposte
+Згуртування,Згуртування,Rally
+Удар,Удар,Strike
+Швидкий рубаючий удар.,Швидкий рубаючий удар.,Fast slashing strike.
+Бойова стійка: контратака при промаху ворога.,Бойова стійка: контратака при промаху ворога.,Combat stance: counterattack on enemy miss.
+Тихий постріл. Жодного ризику осічки.,Тихий постріл. Жодного ризику осічки.,Silent shot. No risk of misfire.
+"Потужний удар, що максимально руйнує обладунок.","Потужний удар, що максимально руйнує обладунок.",Powerful strike that maximally damages armor.
+"Дробячий удар, що ігнорує 70% броні.","Дробячий удар, що ігнорує 70% броні.",Crushing blow that ignores 70% armor.
+"Удар в голову, що ігнорує щит.","Удар в голову, що ігнорує щит.",Head strike that ignores shield.
+Потужний постріл з мушкета. Ігнорує 20% броні.,Потужний постріл з мушкета. Ігнорує 20% броні.,Powerful musket shot. Ignores 20% armor.
+Удар в щілини обладунку (100% пробиття).,Удар в щілини обладунку (100% пробиття).,Strike through armor gaps (100% penetration).
+Атака по трьох сусідніх клітинках перед собою.,Атака по трьох сусідніх клітинках перед собою.,Attack three adjacent tiles in front.
+"Оборонна стійка: автоматична атака будь-кого, хто входить в радіус 2 клітинок.","Оборонна стійка: автоматична атака будь-кого, хто входить в радіус 2 клітинок.",Defensive stance: auto-attack anyone entering 2-tile radius.
+"Спеціальна атака, що завдає великої шкоди щиту.","Спеціальна атака, що завдає великої шкоди щиту.",Special attack dealing great damage to shield.
+Сильний боковий удар сокирою.,Сильний боковий удар сокирою.,Strong sideways axe swing.
+Кидок зброї на коротку дистанцію.,Кидок зброї на коротку дистанцію.,Throw weapon at short range.
+Швидкий колючий удар списом на дистанцію.,Швидкий колючий удар списом на дистанцію.,Quick thrusting spear attack at range.
+Відновлює 50% витривалості (завершує хід).,Відновлює 50% витривалості (завершує хід).,Restores 50% stamina (ends turn).
+Заряджає зброю для наступного пострілу.,Заряджає зброю для наступного пострілу.,Reloads weapon for next shot.
+Атака на дистаніцю 2 гекси.,Атака на дистаніцю 2 гекси.,Attack at 2-hex range.
+Ігнорує 30% броні цілі.,Ігнорує 30% броні цілі.,Ignores 30% of target armor.
+Бойова стійка: автоматична відповідь при промаху ворога.,Бойова стійка: автоматична відповідь при промаху ворога.,Combat stance: auto-riposte on enemy miss.
+Перевірка моралі союзників у радіусі 4 клітинок.,Перевірка моралі союзників у радіусі 4 клітинок.,Morale check for allies within 4 tiles.
+Звичайна рубаюча атака.,Звичайна рубаюча атака.,Standard slashing attack.
+Постріл з мушкета. Ігнорує 20% броні.,Постріл з мушкета. Ігнорує 20% броні.,Musket shot. Ignores 20% armor.
+Степ,Степ,Steppe
+Ліс,Ліс,Forest
+Болото,Болото,Wetlands
+Річка,Річка,River
+Бурсак-утікач,Бурсак-утікач,Escaped Seminarian
+Стрілець,Стрілець,Marksman
+Козак-піхотинець,Козак-піхотинець,Cossack Infantry
+Найманець,Найманець,Mercenary
+Дезертир,Дезертир,Deserter
+Колишній офіцер,Колишній офіцер,Former Officer
+Османська імперія,Османська імперія,Ottoman Empire
+Орда,Орда,Horde
+Річ Посполита,Річ Посполита,Polish-Lithuanian Commonwealth
+"+10 Мораль, +5 Ініціатива","+10 Мораль, +5 Ініціатива","+10 Morale, +5 Initiative"
+"+10 Дальній бій, +5% пробиття броні","+10 Дальній бій, +5% пробиття броні","+10 Ranged, +5% Armor Pen"
+"+5 Захист, утримує Лінію","+5 Захист, утримує Лінію","+5 Defense, Hold the Line"
+"+10 HP, +30 Броня тіла","+10 HP, +30 Броня тіла","+10 HP, +30 Body Armor"
+"Зброю тримати вміє, але серце зламане","Зброю тримати вміє, але серце зламане",Knows how to fight but spirit is broken
++15 Мораль загону,+15 Мораль загону,+15 Squad Morale
+"+10 Мораль, не тікає першим","+10 Мораль, не тікає першим","+10 Morale, never flees first"
++5 Ближній бій,+5 Ближній бій,+5 Melee
+"+5 Ближній бій, вміє стріляти","+5 Ближній бій, вміє стріляти","+5 Melee, can shoot"
+Перший постріл — безкоштовний,Перший постріл — безкоштовний,First shot is free
+Чигирин,Чигирин,Chyhyryn
+Київ,Київ,Kyiv
+Диканька,Диканька,Dykanka
+Суботів,Суботів,Subotiv
+Полтавка,Полтавка,Poltavka
+Бахчисарай,Бахчисарай,Bakhchysarai
+Опішня,Опішня,Opishnia
+Кам'яний Брід,Кам'яний Брід,Kamianyi Brid
+Кам'янець,Кам'янець,Kamianets
+Кодак,Кодак,Kodak
+Ямпіль,Ямпіль,Yampil
+Жванець,Жванець,Zhvanets
+Ничипір,Ничипір,Nychypir
+Гаврило,Гаврило,Havrylo
+Тимофій,Тимофій,Tymofiy
+Панько,Панько,Panko
+Іван,Іван,Ivan
+Петро,Петро,Petro
+Михайло,Михайло,Mykhailo
+Семен,Семен,Semen
+Данило,Данило,Danylo
+Грицько,Грицько,Hrysko
+Хома,Хома,Khoma
+Тарас,Тарас,Taras
+Остап,Остап,Ostap
+Назар,Назар,Nazar
+Кирило,Кирило,Kyrylo
+Панас,Панас,Panas
+Юхим,Юхим,Yukhym
+Андрій,Андрій,Andrii
+Яків,Яків,Yakiv
+Степан,Степан,Stepan
+Кость,Кость,Kost
+Денис,Денис,Denys
+Лесько,Лесько,Lesko
+Охрім,Охрім,Okhrim
+Роман,Роман,Roman
+Клим,Клим,Klym
+Пилип,Пилип,Pylyp
+Улас,Улас,Ulas
+Сава,Сава,Sava
+Ліси,Ліси,Forests
+Дике Поле,Дике Поле,Wild Field
+Кордон,Кордон,Border
+UI_AP_SHORT,ОД,AP
+TIME_DAY,День,Day
+TIME_DUSK,Захід,Dusk
+TIME_NIGHT,Ніч,Night
+TIME_DAWN,Схід,Dawn
+UI_NO_UNIT_SELECTED,Козака не обрано,No cossack selected
+UI_STATS_UNKNOWN,Стати невідомі,Stats unknown
+STAT_MELEE_SHORT,⚔️ Ближній бій: %d%%,⚔️ Melee: %d%%
+STAT_DEFENSE_MELEE_SHORT,🛡 Захист (бл.): %d%%,🛡 Defense (melee): %d%%
+STAT_ARMOR_HELMET_FORMAT,🪖 Броня: %d   Шолом: %d,🪖 Armor: %d   Helmet: %d
+UI_SELL_SETTLEMENT,Продаж лише в поселеннях,Sell at settlements only
+UI_DEAD,Мертвий,Dead
+UI_RIPOSTE_STANCE,⚔️ Стійка: КОНТРУДАР,⚔️ Stance: RIPOSTE
+UI_HIT_CHANCE,🎯 Шанс влучити:,🎯 Hit chance:
+UI_FRIENDLY_FIRE,⚠️ РИЗИК ДРУЖНЬОГО ВОГНЮ!,⚠️ FRIENDLY FIRE RISK!
+TERRAIN_BUSHES_INFO,"🌿 Чагарники\n+15% захист | 3 AP / 6 витр. на крок","🌿 Bushes\n+15% defense | 3 AP / 6 stam. per step"
+TERRAIN_SWAMP_INFO,"💧 Болото\n−25% захист | −25% влучність | 4 AP / 15 витр. на крок","💧 Swamp\n−25% defense | −25% accuracy | 4 AP / 15 stam. per step"
+TERRAIN_WATER_INFO,"🌊 Брід\n4 AP / 15 витр. на крок","🌊 Ford\n4 AP / 15 stam. per step"
+TERRAIN_ROCKS_INFO,"🪨 Каміння\n+5% захист | 3 AP / 8 витр. на крок","🪨 Rocks\n+5% defense | 3 AP / 8 stam. per step"
+TERRAIN_TREES_INFO,"🌲 Дерево\nНепрохідно","🌲 Tree\nImpassable"
+WEAPON_TYPE_SWORD,Шабля,Saber
+WEAPON_TYPE_MUSKET,Мушкет,Musket
+WEAPON_TYPE_HEAVY,Бердиш,Bardiche
+WEAPON_TYPE_ONE_HAND,Одноручна,One-handed
+WEAPON_TYPE_TWO_HAND,Дворучна,Two-handed
+WEAPON_GENERIC_DESC,Звичайна зброя.,Generic weapon.
+WEAPON_STAT_DAMAGE,Шкода:,Damage:
+WEAPON_STAT_PEN,Пробиття:,Penetration:
+WEAPON_STAT_TYPE,Тип:,Type:
+WEAPON_NOTE_BLEED,Високий шанс кровотечі,High bleed chance
+WEAPON_NOTE_RELOAD_NEEDED,Потребує перезарядки,Requires reloading
+WEAPON_NOTE_RANGE2,Радіус атаки: 2,Attack range: 2
+WEAPON_NOTE_ARC,Атака по площі,Area attack
+CS_SLOT_TRINKET_TOOLTIP,Слот для амулетів та оберегів.,Slot for amulets and talismans.
+CS_SLOT_HELMET_TOOLTIP,Захищає голову від критичних ударів.,Protects head from critical hits.
+CS_SLOT_AMMO_TOOLTIP,Запас набоїв для стрілецької зброї.,Supply of ammo for ranged weapons.
+CS_SLOT_ARMOR_TOOLTIP,Захищає тулуб від ударів.,Protects torso from strikes.
+CS_SLOT_BELT_TOOLTIP,Слот швидкого доступу на поясі.,Quick access slot on the belt.
+RESULT_VICTORY,ПЕРЕМОГА,VICTORY
+RESULT_DEFEAT,ПОРАЗКА,DEFEAT
+RESULT_LOOT,Здобич,Loot
+RESULT_NOTHING,Нічого,Nothing
+RESULT_DEFEAT_NO_LOOT,"Поразка.\nЗдобичі немає.","Defeat.\nNo loot."
+RESULT_NO_TROPHIES,Трофеїв не знайдено,No trophies found
+RESULT_KILLED,Загинув,Killed
+RESULT_DMG_DEALT,Завдано шкоди:,Damage dealt:
+RESULT_DMG_TAKEN,Отримано шкоди:,Damage taken:
+RESULT_LEVEL_UP,⬆ РІВЕНЬ!,⬆ LEVEL UP!
+RESULT_INJURY_PERMANENT,Постійна,Permanent
+RESULT_INJURY_TEMPORARY,"Тимчасова • %d дн.","Temporary • %d d."
+RESULT_BTN_MAIN_MENU,Головне меню,Main Menu
+RESULT_BTN_RETRY,Спробувати ще раз,Try Again
+RESULT_BTN_CONTINUE,Продовжити кампанію,Continue Campaign
+UI_THALERS_FORMAT,%d Талерів,%d Thalers
+UI_ENCOUNTER,Зустріч,Encounter
+UI_ZOOM_FORMAT,Зум: x%s,Zoom: x%s
+LOADING_BATTLE,Завантаження битви...,Loading battle...
+UI_ITEM_FALLBACK,Предмет,Item
+Піка (2H),Піка (2H),Pike (2H)
+Порізана рука,Порізана рука,Cut Arm
+Забиті ребра,Забиті ребра,Bruised Ribs
+Струс мозку,Струс мозку,Concussion
+Перелом ребра,Перелом ребра,Broken Rib
+Рана в ногу,Рана в ногу,Leg Wound
+Глибокий поріз,Глибокий поріз,Deep Cut
+Козацька шабля,Козацька шабля,Cossack Saber
+Стьобаний жупан,Стьобаний жупан,Quilted Jupan
+Шкіряний панцир,Шкіряний панцир,Leather Cuirass
+Звичайна шапка,Звичайна шапка,Simple Cap
+Хутряна кучма,Хутряна кучма,Fur Hat
+BATTLE_HINT_LABEL,Підказка,Hint
+BATTLE_ROUND_END,"--- 🔄 Усі юніти походили. Завершення раунду %d ---","--- 🔄 All units acted. End of round %d ---"
+BATTLE_ENEMY_FALLBACK,Ворог,Enemy
+BATTLE_FRIENDLY_FIRE_HIT,"⚠️ Куля випадково влучає в %s!","⚠️ Stray bullet hits %s!"
+BATTLE_LEVEL_UP_FX,"🌟 РІВЕНЬ %d!","🌟 LEVEL %d!"
+STAT_MORALE_SHORT,М:,M:
+BATTLE_PANIC_FLEE,"ВТЕЧА %s лякає союзників!","FLEEING %s panics allies!"
+BATTLE_PANIC_DEATH,"СМЕРТЬ %s підриває бойовий дух!","DEATH of %s breaks morale!"
+GAME_OVER_TITLE,Кінець,Game Over
+GAME_OVER_DESERT,Усі козаки дезертирували. Ваш загін розпався.,All cossacks deserted. Your squad has disbanded.
+GAME_OVER_DEFEAT,Усі козаки загинули в бою.,All cossacks fell in battle.
+UI_MAIN_MENU,Головне меню,Main Menu

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackAction" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/resources/combat/AttackAction.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+id = "throw"
+name = "Метання"
+description = "Кидок зброї на коротку дистанцію."
+ap_cost = 4
+stamina_cost = 15
+attack_range = 4
+damage_multiplier = 1.0
+armor_penetration_bonus = 0.0
+head_hit_chance_bonus = 0.1
+ignores_shield = false
+guaranteed_headshot = false
+animation_type = "shoot"

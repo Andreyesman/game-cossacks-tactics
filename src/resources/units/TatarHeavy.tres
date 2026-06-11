@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/saber.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Татарський вояк"
+background = "Важка кіннота"
+base_hp = 80
+base_stamina = 80
+base_melee_skill = 60
+base_ranged_skill = 30
+base_melee_defense = 12
+base_ranged_defense = 10
+base_body_armor = 20
+base_initiative = 60
+base_resolve = 55
+star_hp = 0
+star_melee = 1
+star_defense = 0
+origin_name = "Орда"
+origin_trait = "Загартований рубака"
+origin_bonus = "+5 Ближній бій"
+xp_reward = 45
+default_weapon = ExtResource("2_weapon")

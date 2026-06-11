@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackAction" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/resources/combat/AttackAction.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "thrust"
+name = "Випад"
+description = "Швидкий колючий удар списом на дистанцію."
+ap_cost = 5
+stamina_cost = 12
+attack_range = 2
+damage_multiplier = 0.9
+armor_penetration_bonus = 0.0
+head_hit_chance_bonus = 0.0
+animation_type = "thrust"

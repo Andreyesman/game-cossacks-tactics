@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/saber_strike.tres" id="1_strike"]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/split_shield.tres" id="2_split"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="3_script"]
+[resource]
+script = ExtResource("3_script")
+name = "Бойова Сокира"
+type = 2
+damage_min = 40
+damage_max = 60
+armor_penetration = 0.5
+armor_damage_modifier = 1.0
+shield_damage_modifier = 1.5
+weapon_range = 1
+weight = 12
+initiative_penalty = -6
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_strike"), ExtResource("2_split")])
+is_two_handed = false

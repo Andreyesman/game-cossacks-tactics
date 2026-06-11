@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cleoai312uea5"]
+
+[ext_resource type="Texture2D" uid="uid://bpturyx5m5to3" path="res://ui/imports/figma_godot_export/images/a922b99b35129ba0eabcc0dcecae6c15bf0f106b.png" id="1_2sw5d"]
+[ext_resource type="Script" uid="uid://c5lu8cqn6eh8q" path="res://src/resources/UnitData.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Ничипір"
+background = "Козак"
+base_hp = 80
+base_stamina = 85
+base_melee_skill = 60
+base_ranged_skill = 65
+base_melee_defense = 12
+base_ranged_defense = 40
+base_initiative = 65
+base_resolve = 55
+star_melee = 1
+star_defense = 1
+origin_name = "Бурсак-утікач"
+origin_trait = "Бурсак-утікач"
+origin_bonus = "+10 Мораль, +5 Ініціатива"
+portrait = ExtResource("1_2sw5d")

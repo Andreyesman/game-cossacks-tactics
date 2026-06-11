@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackAction" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/resources/combat/AttackAction.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+id = "puncture"
+name = "Прокол"
+description = "Удар в щілини обладунку (100% пробиття)."
+ap_cost = 4
+stamina_cost = 15
+attack_range = 1
+damage_multiplier = 0.8
+armor_penetration_bonus = 1.0
+head_hit_chance_bonus = 0.0
+ignores_shield = false
+guaranteed_headshot = false
+animation_type = "thrust"

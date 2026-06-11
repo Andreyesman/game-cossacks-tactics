@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/bow.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Татарин"
+background = "Степовий рейдер"
+base_hp = 65
+base_stamina = 90
+base_melee_skill = 45
+base_ranged_skill = 68
+base_melee_defense = 8
+base_ranged_defense = 12
+base_initiative = 72
+base_resolve = 50
+star_hp = 0
+star_melee = 0
+star_defense = 0
+origin_name = "Орда"
+origin_trait = "Степовий лучник"
+origin_bonus = "Перший постріл — безкоштовний"
+xp_reward = 35
+default_weapon = ExtResource("2_weapon")

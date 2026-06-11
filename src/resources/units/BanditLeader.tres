@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/battle_axe.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Отаман"
+background = "Ватажок"
+base_hp = 90
+base_stamina = 85
+base_melee_skill = 65
+base_ranged_skill = 25
+base_melee_defense = 12
+base_ranged_defense = 8
+base_body_armor = 15
+base_initiative = 52
+base_resolve = 60
+star_hp = 1
+star_melee = 1
+star_defense = 0
+origin_name = "Колишній офіцер"
+origin_trait = "Ватажок зграї"
+origin_bonus = "+15 Мораль загону"
+xp_reward = 60
+default_weapon = ExtResource("2_weapon")

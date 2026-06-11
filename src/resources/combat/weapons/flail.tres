@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/lash.tres" id="1_lash"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="2_script"]
+[resource]
+script = ExtResource("2_script")
+name = "Обушок / Ціп"
+type = 3
+damage_min = 35
+damage_max = 50
+armor_penetration = 0.3
+armor_damage_modifier = 1.0
+shield_damage_modifier = 1.0
+weapon_range = 1
+weight = 13
+initiative_penalty = -5
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_lash")])
+is_two_handed = false

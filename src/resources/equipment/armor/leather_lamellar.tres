@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ArmorResource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/resources/equipment/ArmorResource.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+name = "Шкіряний панцир"
+armor_hp = 70
+stamina_penalty = -8
+initiative_penalty = -4

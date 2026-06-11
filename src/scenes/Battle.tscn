@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://d1sswu6uiweth"]
+
+[ext_resource type="Script" uid="uid://dcpwx48nchmx5" path="res://src/tactical/TacticalGrid.gd" id="1_grid"]
+[ext_resource type="Script" uid="uid://bw7giwgx8b7b0" path="res://src/units/CombatUnit.gd" id="2_unit"]
+[ext_resource type="Resource" path="res://src/resources/CossackData.tres" id="3_cossack_data"]
+[ext_resource type="Resource" path="res://src/resources/EnemyData.tres" id="4_enemy_data"]
+[ext_resource type="Script" uid="uid://chdhl836vo43x" path="res://src/tactical/BattleManager.gd" id="5_manager"]
+[ext_resource type="PackedScene" path="res://src/ui/UnitPanel.tscn" id="6_panel"]
+[ext_resource type="Script" uid="uid://bbu6nihysqyi5" path="res://src/ui/CombatLog.gd" id="7_log"]
+[ext_resource type="Script" uid="uid://ckiw1i82kywct" path="res://src/tactical/CameraController.gd" id="8_camera"]
+
+[node name="Battle" type="Node2D" unique_id=603242190]
+
+[node name="TacticalGrid" type="Node2D" parent="." unique_id=1961505313]
+script = ExtResource("1_grid")
+
+[node name="Player1" type="Node2D" parent="." unique_id=1653010433]
+position = Vector2(-240, 520)
+script = ExtResource("2_unit")
+data = ExtResource("3_cossack_data")
+
+[node name="Player2" type="Node2D" parent="." unique_id=1216741104]
+position = Vector2(-160, 560)
+script = ExtResource("2_unit")
+data = ExtResource("3_cossack_data")
+weapon_type = "musket"
+
+[node name="Enemy1" type="Node2D" parent="." unique_id=900866880]
+position = Vector2(320, 320)
+script = ExtResource("2_unit")
+data = ExtResource("4_enemy_data")
+team = 1
+
+[node name="Player3" type="Node2D" parent="." unique_id=2035754335]
+position = Vector2(-240, 600)
+script = ExtResource("2_unit")
+data = ExtResource("3_cossack_data")
+weapon_type = "spear"
+
+[node name="Player4" type="Node2D" parent="." unique_id=295798340]
+position = Vector2(-320, 640)
+script = ExtResource("2_unit")
+data = ExtResource("3_cossack_data")
+weapon_type = "heavy"
+
+[node name="Enemy3" type="Node2D" parent="." unique_id=1975053940]
+position = Vector2(480, 480)
+script = ExtResource("2_unit")
+data = ExtResource("4_enemy_data")
+team = 1
+weapon_type = "spear"
+
+[node name="Enemy4" type="Node2D" parent="." unique_id=1875135360]
+position = Vector2(560, 520)
+script = ExtResource("2_unit")
+data = ExtResource("4_enemy_data")
+team = 1
+weapon_type = "heavy"
+
+[node name="Enemy2" type="Node2D" parent="." unique_id=1941407580]
+position = Vector2(400, 440)
+script = ExtResource("2_unit")
+data = ExtResource("4_enemy_data")
+team = 1
+
+[node name="BattleManager" type="Node2D" parent="." unique_id=1907661809]
+script = ExtResource("5_manager")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=917326655]
+position = Vector2(0, 480)
+script = ExtResource("8_camera")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=2130834247]
+
+[node name="CombatLog" type="PanelContainer" parent="UI" unique_id=891750464]
+custom_minimum_size = Vector2(400, 200)
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 420.0
+offset_bottom = 220.0
+script = ExtResource("7_log")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/CombatLog" unique_id=1307829727]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/CombatLog/MarginContainer" unique_id=1185998070]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/CombatLog/MarginContainer/ScrollContainer" unique_id=1849517719]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResizeHandle" type="Control" parent="UI/CombatLog" unique_id=1272323450]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_vertical = 8
+mouse_default_cursor_shape = 9
+
+[node name="EndTurnButton" type="Button" parent="UI" unique_id=1728902204]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -100.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/h_separation = 12
+theme_override_font_sizes/font_size = 20
+text = "🏁 Завершити хід"
+
+[node name="RetreatConfirmation" type="ConfirmationDialog" parent="UI" unique_id=289431881]
+title = "Підтвердження виходу"
+initial_position = 1
+size = Vector2i(350, 100)
+ok_button_text = "Так, відступити"
+dialog_text = "Ви впевнені, що хочете відступити цим юнітом?"
+cancel_button_text = "Залишитись"
+
+[node name="UnitPanel" parent="UI" instance=ExtResource("6_panel")]
+
+
+[connection signal="pressed" from="UI/EndTurnButton" to="BattleManager" method="end_unit_turn"]

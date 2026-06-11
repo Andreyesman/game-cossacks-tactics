@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/saber.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Розбійник"
+background = "Дезертир"
+base_hp = 75
+base_stamina = 80
+base_melee_skill = 54
+base_ranged_skill = 35
+base_melee_defense = 10
+base_ranged_defense = 10
+base_initiative = 55
+base_resolve = 45
+star_hp = 0
+star_melee = 0
+star_defense = 0
+origin_name = "Дезертир"
+origin_trait = "Колишній вояк"
+origin_bonus = "Зброю тримати вміє, але серце зламане"
+xp_reward = 30
+default_weapon = ExtResource("2_weapon")

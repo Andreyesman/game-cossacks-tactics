@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3]
+
+[ext_resource type="Resource" path="res://src/resources/combat/actions/saber_strike.tres" id="1_strike"]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/riposte.tres" id="2_riposte"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="3_script"]
+
+[resource]
+script = ExtResource("3_script")
+name = "Козацька Шабля"
+type = 0
+damage_min = 35
+damage_max = 45
+armor_penetration = 0.2
+armor_damage_modifier = 1.0
+shield_damage_modifier = 1.0
+weapon_range = 1
+weight = 8
+initiative_penalty = -2
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_strike"), ExtResource("2_riposte")])
+is_two_handed = false

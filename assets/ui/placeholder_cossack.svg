@@ -1,0 +1,8 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded head/body -->
+  <circle cx="64" cy="74" r="35" fill="#00cccc"/>
+  <!-- Scalp lock (Oseredets) -->
+  <path d="M64 39 Q68 25 76 20" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- Mustache -->
+  <path d="M40 85 Q64 95 88 85" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+</svg>

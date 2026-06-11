@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/puncture.tres" id="1_puncture"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="2_script"]
+[resource]
+script = ExtResource("2_script")
+name = "Кинджал (Засапожний)"
+type = 6
+damage_min = 15
+damage_max = 25
+armor_penetration = 0.2
+armor_damage_modifier = 1.0
+shield_damage_modifier = 0.5
+weapon_range = 1
+weight = 2
+initiative_penalty = 0
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_puncture")])
+is_two_handed = false

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/saber.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Ничипір"
+background = "Козак"
+base_hp = 80
+base_stamina = 85
+base_melee_skill = 60
+base_ranged_skill = 40
+base_melee_defense = 12
+base_ranged_defense = 20
+base_initiative = 65
+base_resolve = 55
+star_hp = 0
+star_melee = 1
+star_defense = 1
+origin_name = "Бурсак-утікач"
+origin_trait = "Бурсак-утікач"
+origin_bonus = "+10 Мораль, +5 Ініціатива"
+xp_reward = 50
+default_weapon = ExtResource("2_weapon")

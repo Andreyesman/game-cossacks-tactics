@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/musket_shot.tres" id="1_shot"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="2_script"]
+[resource]
+script = ExtResource("2_script")
+name = "Мушкет «Яничарка»"
+type = 4
+damage_min = 50
+damage_max = 70
+armor_penetration = 0.2
+armor_damage_modifier = 1.0
+shield_damage_modifier = 1.0
+weapon_range = 12
+weight = 15
+initiative_penalty = -10
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_shot")])
+is_two_handed = true

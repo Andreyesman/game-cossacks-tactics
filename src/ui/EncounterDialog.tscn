@@ -1,0 +1,131 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://src/ui/EncounterDialog.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.06, 0.055, 0.045, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.38, 0.12, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_atk_n"]
+bg_color = Color(0.45, 0.1, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_atk_h"]
+bg_color = Color(0.56, 0.28, 0.28, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avd_n"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avd_h"]
+bg_color = Color(0.36, 0.36, 0.36, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tlk_n"]
+bg_color = Color(0.1, 0.3, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tlk_h"]
+bg_color = Color(0.28, 0.44, 0.28, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="EncounterDialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+script = ExtResource("1_script")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(420, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.894, 0.804, 0.42, 1)
+text = "Зустріч"
+
+[node name="RewardLabel" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+visible = false
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.75, 0.65, 0.35, 1)
+text = "Здобич: ~0 талерів"
+
+[node name="ButtonBox" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="AttackBtn" type="Button" parent="CenterContainer/PanelContainer/VBox/ButtonBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(130, 42)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_atk_n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_atk_h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_atk_h")
+text = "Атакувати"
+
+[node name="AvoidBtn" type="Button" parent="CenterContainer/PanelContainer/VBox/ButtonBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(130, 42)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_avd_n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_avd_h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_avd_h")
+text = "Уникнути"
+
+[node name="TalkBtn" type="Button" parent="CenterContainer/PanelContainer/VBox/ButtonBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(130, 42)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_tlk_n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tlk_h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tlk_h")
+text = "Говорити"

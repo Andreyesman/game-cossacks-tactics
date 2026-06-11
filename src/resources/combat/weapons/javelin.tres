@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3]
+[ext_resource type="Resource" path="res://src/resources/combat/actions/throw.tres" id="1_throw"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="2_script"]
+[resource]
+script = ExtResource("2_script")
+name = "Сулиця (дротик)"
+type = 8
+damage_min = 30
+damage_max = 45
+armor_penetration = 0.3
+armor_damage_modifier = 1.0
+shield_damage_modifier = 1.0
+weapon_range = 4
+weight = 4
+initiative_penalty = 0
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_throw")])
+is_two_handed = false

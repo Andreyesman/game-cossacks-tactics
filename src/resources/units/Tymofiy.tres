@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/spear.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Тимофій"
+background = "Списоносець"
+base_hp = 80
+base_stamina = 85
+base_melee_skill = 58
+base_ranged_skill = 35
+base_melee_defense = 15
+base_ranged_defense = 10
+base_initiative = 62
+base_resolve = 52
+star_hp = 0
+star_melee = 0
+star_defense = 1
+origin_name = "Козак-піхотинець"
+origin_trait = "Стійкий рубака"
+origin_bonus = "+5 Захист, утримує Лінію"
+xp_reward = 50
+default_weapon = ExtResource("2_weapon")

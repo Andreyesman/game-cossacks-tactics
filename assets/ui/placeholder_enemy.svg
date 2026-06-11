@@ -1,0 +1,8 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded head/body -->
+  <circle cx="64" cy="74" r="35" fill="#cc1a33"/>
+  <!-- Raider Helmet/Cap -->
+  <path d="M30 65 Q64 25 98 65" fill="#ffffff" stroke="#ffffff" stroke-width="2"/>
+  <!-- Eye slit or simple mask effect -->
+  <rect x="44" y="65" width="40" height="5" fill="#cc1a33"/>
+</svg>

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://src/resources/combat/actions/thrust.tres" id="1_thrust"]
+[ext_resource type="Script" path="res://src/resources/combat/WeaponResource.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+name = "Спис"
+type = 1
+damage_min = 25
+damage_max = 40
+armor_penetration = 0.1
+weapon_range = 2
+weight = 12
+initiative_penalty = -5
+actions = Array[Resource("res://src/resources/combat/AttackAction.gd")]([ExtResource("1_thrust")])
+is_two_handed = true

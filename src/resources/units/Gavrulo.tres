@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/janissary_musket.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Гаврило"
+background = "Мушкетер"
+base_hp = 70
+base_stamina = 80
+base_melee_skill = 45
+base_ranged_skill = 72
+base_melee_defense = 8
+base_ranged_defense = 15
+base_initiative = 55
+base_resolve = 50
+star_hp = 0
+star_melee = 0
+star_defense = 0
+origin_name = "Стрілець"
+origin_trait = "Влучний стрілець"
+origin_bonus = "+10 Дальній бій, +5% пробиття броні"
+xp_reward = 50
+default_weapon = ExtResource("2_weapon")

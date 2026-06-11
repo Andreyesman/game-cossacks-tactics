@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="UnitData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/resources/UnitData.gd" id="1_script"]
+[ext_resource type="Resource" path="res://src/resources/combat/weapons/janissary_musket.tres" id="2_weapon"]
+
+[resource]
+script = ExtResource("1_script")
+unit_name = "Яничар"
+background = "Османська піхота"
+base_hp = 85
+base_stamina = 80
+base_melee_skill = 55
+base_ranged_skill = 65
+base_melee_defense = 10
+base_ranged_defense = 15
+base_body_armor = 20
+base_initiative = 50
+base_resolve = 65
+star_hp = 0
+star_melee = 0
+star_defense = 1
+origin_name = "Османська імперія"
+origin_trait = "Яничарська дисципліна"
+origin_bonus = "+10 Мораль, не тікає першим"
+xp_reward = 55
+default_weapon = ExtResource("2_weapon")

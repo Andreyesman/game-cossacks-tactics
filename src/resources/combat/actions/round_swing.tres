@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackAction" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/resources/combat/AttackAction.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+id = "round_swing"
+name = "Круговий розмах"
+description = "Атака по трьох сусідніх клітинках перед собою."
+ap_cost = 9
+stamina_cost = 35
+attack_range = 1
+damage_multiplier = 0.75
+armor_penetration_bonus = 0.0
+head_hit_chance_bonus = 0.0
+ignores_shield = false
+guaranteed_headshot = false
+animation_type = "strike"

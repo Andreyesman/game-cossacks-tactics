@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HelmetResource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/resources/equipment/HelmetResource.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+name = "Звичайна шапка (Шлик)"
+armor_hp = 30
+stamina_penalty = 0
+initiative_penalty = 0
+vision_penalty = 0
