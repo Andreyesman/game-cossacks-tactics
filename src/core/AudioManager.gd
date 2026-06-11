@@ -3,8 +3,8 @@ extends Node
 const SETTINGS_FILE := "user://settings.cfg"
 
 const TRACKS: Dictionary = {
-	"map": "res://assets/audio/music/map_theme.wav",
-	"battle": "res://assets/audio/music/battle_theme.wav"
+	"map": "res://assets/audio/music/map_theme.ogg",
+	"battle": "res://assets/audio/music/battle_theme.ogg"
 }
 
 const SFX: Dictionary = {

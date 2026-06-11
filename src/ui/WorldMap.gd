@@ -5,27 +5,27 @@ extends Node2D
 const MAP_W := 3000.0
 const MAP_H := 2000.0
 
-const C_BG          := Color(0.08, 0.07, 0.05)
-const C_ROAD        := Color(0.45, 0.38, 0.22, 0.7)
-const C_RIVER       := Color(0.18, 0.35, 0.55, 0.85)
-const C_LAKE        := Color(0.15, 0.30, 0.50, 0.75)
-const C_PLAYER      := Color(0.9, 0.85, 0.2)
-const C_GOLD        := Color(0.894, 0.804, 0.42)
-const C_DARK_BG     := Color(0.04, 0.035, 0.03)
+const C_BG := Color(0.08, 0.07, 0.05)
+const C_ROAD := Color(0.45, 0.38, 0.22, 0.7)
+const C_RIVER := Color(0.18, 0.35, 0.55, 0.85)
+const C_LAKE := Color(0.15, 0.30, 0.50, 0.75)
+const C_PLAYER := Color(0.9, 0.85, 0.2)
+const C_GOLD := Color(0.894, 0.804, 0.42)
+const C_DARK_BG := Color(0.04, 0.035, 0.03)
 
 # Пікселів карти на один ігровий день
 const PIXELS_PER_DAY := 1500.0
 
 # Торгівля
-const TRADE_PROV_PACK := 5    # провізій у пакеті
-const TRADE_PROV_COST := 25   # талерів за пакет
-const TRADE_HEAL_COST := 30   # талерів за лікування одного юніта
+const TRADE_PROV_PACK := 5 # провізій у пакеті
+const TRADE_PROV_COST := 25 # талерів за пакет
+const TRADE_HEAL_COST := 30 # талерів за лікування одного юніта
 
 # День/ніч
-const FOG_REVEAL_DAY  := 280.0     # радіус видимості вдень (px карти)
-const FOG_REVEAL_NIGHT := 160.0    # радіус видимості вночі
-const C_DAY   := Color(1.00, 1.00, 1.00)
-const C_DUSK  := Color(0.72, 0.52, 0.32)
+const FOG_REVEAL_DAY := 280.0 # радіус видимості вдень (px карти)
+const FOG_REVEAL_NIGHT := 160.0 # радіус видимості вночі
+const C_DAY := Color(1.00, 1.00, 1.00)
+const C_DUSK := Color(0.72, 0.52, 0.32)
 const C_NIGHT := Color(0.32, 0.34, 0.50)
 
 # ── Посилання на вузли ────────────────────────────────────────────────────────
@@ -37,7 +37,7 @@ var _water_layer: Node2D
 var _roads_layer: Node2D
 var _locations_layer: Node2D
 var _parties_layer: Node2D
-var _player_party: Node2D  # Node2D з PlayerParty.gd
+var _player_party: Node2D # Node2D з PlayerParty.gd
 var _hud: CanvasLayer
 
 # HUD елементи
@@ -48,8 +48,8 @@ var _provisions_label: Label
 var _bandages_label: Label
 var _rep_labels: Dictionary[String, Label] = {}
 var _squad_panel: Control
-var _encounter_dialog: Control   # EncounterDialog.tscn (бій з загоном/локацією)
-var _location_dialog: Control    # процедурний діалог очищеної локації (торгівля/найм)
+var _encounter_dialog: Control # EncounterDialog.tscn (бій з загоном/локацією)
+var _location_dialog: Control # процедурний діалог очищеної локації (торгівля/найм)
 var _inventory_panel: Control = null
 var _inventory_btn: Button = null
 var _selected_unit_name: String = ""
@@ -83,10 +83,10 @@ var world_ticking: bool = false
 var _speed_multiplier: int = 1
 var _prev_speed: int = 1
 var _is_paused: bool = false
-var _active_encounter: Node2D = null  # загін або локація з активним діалогом
+var _active_encounter: Node2D = null # загін або локація з активним діалогом
 var _encounter_cooldowns: Dictionary[Node2D, float] = {}
-var _nav_target_marker: Node2D = null  # локація, до якої гравець іде після кліку
-var _recruits_cache: Dictionary[String, Array] = {}  # loc_id → Array[Dict]
+var _nav_target_marker: Node2D = null # локація, до якої гравець іде після кліку
+var _recruits_cache: Dictionary[String, Array] = {} # loc_id → Array[Dict]
 var _camera_follows_player: bool = true
 var _is_dragging_cam: bool = false
 
@@ -97,7 +97,7 @@ const FOG_CELL_SIZE := 30.0 # px на одну комірку сітки
 
 var _fog_rect: ColorRect = null
 var _canvas_modulate: CanvasModulate = null
-var _day_time: float = 0.285 * PIXELS_PER_DAY  # починаємо о 12:00 (полудень = phase 0.285)
+var _day_time: float = 0.285 * PIXELS_PER_DAY # починаємо о 12:00 (полудень = phase 0.285)
 var _torch_light: PointLight2D = null
 var _fog_cloud_rect: ColorRect = null
 
@@ -199,7 +199,7 @@ func _update_camera_zoom() -> void:
 # ── Рендер карти ─────────────────────────────────────────────────────────────
 
 func _render_world(state: Dictionary) -> void:
-	_render_biomes(state.get("biomes", []))  # biomes arg kept for API compat (ignored internally)
+	_render_biomes(state.get("biomes", [])) # biomes arg kept for API compat (ignored internally)
 	_render_water(state.get("rivers", []), state.get("lakes", []))
 	_render_roads(state.get("roads", []))
 	_render_locations(state.get("locations", []))
@@ -311,7 +311,7 @@ func _setup_torch_light() -> void:
 	tex.gradient = grad
 	_torch_light = PointLight2D.new()
 	_torch_light.texture = tex
-	_torch_light.texture_scale = 0.75  # ~96px radius
+	_torch_light.texture_scale = 0.75 # ~96px radius
 	_torch_light.energy = 0.0
 	_torch_light.color = Color(1.0, 0.72, 0.25)
 	_player_party.add_child(_torch_light)
@@ -319,7 +319,7 @@ func _setup_torch_light() -> void:
 func _setup_fog() -> void:
 	# 1. Завантаження та розкодування стану сітки з world_state
 	var cm := get_node_or_null("/root/CampaignManager")
-	var fow_base64 : String = ""
+	var fow_base64: String = ""
 	if cm and cm.world_state.has("fog_of_war_data"):
 		fow_base64 = cm.world_state["fog_of_war_data"]
 	
@@ -390,7 +390,7 @@ void fragment() {
 	_fog_rect.name = "FogLayer"
 	_fog_rect.size = Vector2(MAP_W, MAP_H)
 	_fog_rect.color = Color(0, 0, 0, 0)
-	_fog_rect.z_index = 8  # вище локацій (4) та загонів (5), нижче гравця (10)
+	_fog_rect.z_index = 8 # вище локацій (4) та загонів (5), нижче гравця (10)
 	_fog_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fog_rect.material = fog_mat
 	_map_root.add_child(_fog_rect)
@@ -449,15 +449,15 @@ func _get_biome_at(pos: Vector2) -> String:
 func _get_biome_modifier(biome_id: String) -> float:
 	match biome_id:
 		"forest":
-			return 0.7  # -30% дальність огляду в лісі
+			return 0.7 # -30% дальність огляду в лісі
 		"hill":
 			if is_instance_valid(_player_party) and not _player_party.is_moving:
-				return 1.2  # +20% дальність огляду при зупинці на пагорбі
+				return 1.2 # +20% дальність огляду при зупинці на пагорбі
 			return 1.0
 		"kurgan":
-			return 1.5  # +50% дальність огляду на кургані
+			return 1.5 # +50% дальність огляду на кургані
 		_:
-			return 1.0  # звичайний огляд в степу / болоті / яру
+			return 1.0 # звичайний огляд в степу / болоті / яру
 
 func _update_fog_grid(player_pos: Vector2, reveal_radius: float) -> void:
 	if not is_instance_valid(_fog_image):
@@ -632,7 +632,7 @@ void fragment() {
 	bg.name = "ParchmentBG"
 	bg.position = Vector2.ZERO
 	bg.size = Vector2(MAP_W, MAP_H)
-	bg.color = Color(0.86, 0.76, 0.52)  # fallback якщо шейдер не завантажиться
+	bg.color = Color(0.86, 0.76, 0.52) # fallback якщо шейдер не завантажиться
 	bg.material = parch_mat
 	_biome_layer.add_child(bg)
 
@@ -682,7 +682,6 @@ void fragment() {
 			_biome_layer.add_child(tick)
 
 
-
 # ── Картографічні символи (дерева, пагорби, болото) ─────────────────────────────────
 
 # Символи малюються на окремому шарі (symbol_layer) поверх біомних полігонів.
@@ -696,19 +695,19 @@ func _render_cartographic_symbols(state: Dictionary) -> void:
 	_map_root.add_child(_symbol_layer)
 
 	var rng := RandomNumberGenerator.new()
-	rng.seed = 777  # Фіксований seed — символи розташовані однаково
+	rng.seed = 777 # Фіксований seed — символи розташовані однаково
 
 	# 1. Дерева у лісових патчах
 	for patch in state.get("forest_patches", []):
 		var cx: float = patch["x"]
 		var cy: float = patch["y"]
-		var r: float  = patch["r"]
+		var r: float = patch["r"]
 		# Кількість дерев пропорційна до площі патчу
 		var num_trees := clampi(int(r * r * 0.00028), 5, 22)
 		for _t in range(num_trees):
 			for _attempt in range(12):
 				var angle := rng.randf() * TAU
-				var dist  := sqrt(rng.randf()) * r * 0.82  # рівномірно по площі
+				var dist := sqrt(rng.randf()) * r * 0.82 # рівномірно по площі
 				var tp := Vector2(cx + cos(angle) * dist, cy + sin(angle) * dist)
 				_draw_tree_symbol(tp)
 				break
@@ -717,7 +716,7 @@ func _render_cartographic_symbols(state: Dictionary) -> void:
 	for patch in state.get("hill_patches", []):
 		var cx: float = patch["x"]
 		var cy: float = patch["y"]
-		var r: float  = patch["r"]
+		var r: float = patch["r"]
 		var verts: Array = patch.get("verts", [])
 		if verts.is_empty():
 			continue
@@ -727,24 +726,24 @@ func _render_cartographic_symbols(state: Dictionary) -> void:
 	for patch in state.get("swamp_patches", []):
 		var cx: float = patch["x"]
 		var cy: float = patch["y"]
-		var r: float  = patch["r"]
+		var r: float = patch["r"]
 		_draw_swamp_symbols(cx, cy, r, rng)
 
 # Намалює одне дерево у стилі рукописних карт XVII ст.
 func _draw_tree_symbol(pos: Vector2) -> void:
-	const C_TRUNK  := Color(0.26, 0.17, 0.07, 0.80)
-	const C_CROWN  := Color(0.14, 0.26, 0.09, 0.82)
+	const C_TRUNK := Color(0.26, 0.17, 0.07, 0.80)
+	const C_CROWN := Color(0.14, 0.26, 0.09, 0.82)
 	# Стовбур
 	var trunk := Line2D.new()
 	trunk.width = 1.5
 	trunk.default_color = C_TRUNK
-	trunk.add_point(pos + Vector2(0.0,  5.0))
+	trunk.add_point(pos + Vector2(0.0, 5.0))
 	trunk.add_point(pos + Vector2(0.0, -1.0))
 	_symbol_layer.add_child(trunk)
 	# Ліва гілка
 	var bl := Line2D.new()
 	bl.width = 1.2; bl.default_color = C_CROWN
-	bl.add_point(pos + Vector2( 0.0, -1.0))
+	bl.add_point(pos + Vector2(0.0, -1.0))
 	bl.add_point(pos + Vector2(-6.0, -7.0))
 	_symbol_layer.add_child(bl)
 	# Права гілка
@@ -762,12 +761,12 @@ func _draw_tree_symbol(pos: Vector2) -> void:
 	# Нижня пара гілок (для класичного вигляду)
 	var bl2 := Line2D.new()
 	bl2.width = 1.0; bl2.default_color = C_CROWN
-	bl2.add_point(pos + Vector2( 0.0,  2.0))
+	bl2.add_point(pos + Vector2(0.0, 2.0))
 	bl2.add_point(pos + Vector2(-4.5, -2.5))
 	_symbol_layer.add_child(bl2)
 	var br2 := Line2D.new()
 	br2.width = 1.0; br2.default_color = C_CROWN
-	br2.add_point(pos + Vector2(0.0,  2.0))
+	br2.add_point(pos + Vector2(0.0, 2.0))
 	br2.add_point(pos + Vector2(4.5, -2.5))
 	_symbol_layer.add_child(br2)
 
@@ -782,16 +781,16 @@ func _draw_hill_hatching(cx: float, cy: float, r: float,
 		var t := (float(row) + 0.5) / float(num_rows)
 		# Ширина рядку зменшується до краю
 		var half_w := sqrt(1.0 - t * t) * r * 1.2
-		var row_y  := cy - r * 0.6 + t * r * 1.2
+		var row_y := cy - r * 0.6 + t * r * 1.2
 		# Невеликий jitter по Y
 		row_y += rng.randf_range(-3.0, 3.0)
 		# Риска: злегка по ходу від лівого краю до правого
 		var stroke := Line2D.new()
-		stroke.width = lerpf(2.0, 0.8, t)  # Товщіше внизу, тонше вгорі
+		stroke.width = lerpf(2.0, 0.8, t) # Товщіше внизу, тонше вгорі
 		stroke.default_color = C_HATCH
-		stroke.add_point(Vector2(cx - half_w, row_y + 3.0))       # лівий край — нижче
-		stroke.add_point(Vector2(cx,          row_y))              # центр
-		stroke.add_point(Vector2(cx + half_w, row_y + 3.0))       # правий край — нижче
+		stroke.add_point(Vector2(cx - half_w, row_y + 3.0)) # лівий край — нижче
+		stroke.add_point(Vector2(cx, row_y)) # центр
+		stroke.add_point(Vector2(cx + half_w, row_y + 3.0)) # правий край — нижче
 		_symbol_layer.add_child(stroke)
 
 # Хвилясті горизонтальні лінії — класичний символ болота на старих картах.
@@ -818,13 +817,13 @@ func _draw_swamp_symbols(cx: float, cy: float, r: float,
 
 func _render_geography_patches(state: Dictionary) -> void:
 	# Кольори
-	const C_FOREST  := Color(0.11, 0.22, 0.09, 0.88)   # Темно-зелений ліс
-	const C_FOREST2 := Color(0.16, 0.32, 0.12, 0.55)   # Прозорі краї лісу
-	const C_HILL    := Color(0.40, 0.31, 0.16, 0.75)   # Хребет пагорбів
-	const C_HILL_HI := Color(0.55, 0.44, 0.22, 0.50)   # Освітлена грань
-	const C_SWAMP   := Color(0.13, 0.21, 0.15, 0.82)   # Болото
-	const C_KURGAN  := Color(0.50, 0.40, 0.22)          # Курган
-	const C_RAVINE  := Color(0.20, 0.14, 0.08, 0.92)   # Яр
+	const C_FOREST := Color(0.11, 0.22, 0.09, 0.88) # Темно-зелений ліс
+	const C_FOREST2 := Color(0.16, 0.32, 0.12, 0.55) # Прозорі краї лісу
+	const C_HILL := Color(0.40, 0.31, 0.16, 0.75) # Хребет пагорбів
+	const C_HILL_HI := Color(0.55, 0.44, 0.22, 0.50) # Освітлена грань
+	const C_SWAMP := Color(0.13, 0.21, 0.15, 0.82) # Болото
+	const C_KURGAN := Color(0.50, 0.40, 0.22) # Курган
+	const C_RAVINE := Color(0.20, 0.14, 0.08, 0.92) # Яр
 
 	# 1. Ліси — органічні blob з pre-computed вершинами
 	for patch in state.get("forest_patches", []):
@@ -934,15 +933,15 @@ func get_terrain_speed_modifier(pos: Vector2) -> float:
 	var biome := _get_biome_at(pos)
 	match biome:
 		"forest":
-			return 0.70  # -30% швидкість у лісі
+			return 0.70 # -30% швидкість у лісі
 		"swamp":
-			return 0.50  # -50% швидкість у болоті
+			return 0.50 # -50% швидкість у болоті
 		"hill":
-			return 0.60  # -40% швидкість на пагорбах
+			return 0.60 # -40% швидкість на пагорбах
 		"ravine":
-			return 0.40  # -60% швидкість в ярах (багнах) або обхід
+			return 0.40 # -60% швидкість в ярах (багнах) або обхід
 		_:
-			return 1.0   # Степ/Курган — звичайна швидкість
+			return 1.0 # Степ/Курган — звичайна швидкість
 
 ## Повертає назву фракції, яка контролює точку pos (Voronoi за найближчим містом).
 func get_faction_at(pos: Vector2) -> String:
@@ -965,7 +964,7 @@ func get_faction_at(pos: Vector2) -> String:
 			best_dist = d
 			best_faction = str(anchor.get("faction", "none"))
 	return best_faction
-
+	
 func _dist_to_segment(p: Vector2, a: Vector2, b: Vector2) -> float:
 	var ab: Vector2 = b - a
 	var len_sq: float = ab.dot(ab)
@@ -1041,11 +1040,11 @@ func _build_hud(_state: Dictionary) -> void:
 	_build_onboarding_panel()
 
 func _build_top_bar() -> void:
-	const C_PANEL_BG   := Color(0.996, 0.957, 0.792)  # #FEF4CA
-	const C_STROKE     := Color(0.0, 0.0, 0.0, 0.6)   # rgba(0,0,0,0.60)
-	const C_TEXT_PRI   := Color(0.0,   0.0,   0.0  )   # text/primary  → black
-	const C_TEXT_SEC   := Color(0.392, 0.388, 0.388)   # text/secondary → #646363
-	const C_CIRCLE   := Color(0.6, 0.776, 1.0)         # #99C6FF placeholder
+	const C_PANEL_BG := Color(0.996, 0.957, 0.792) # #FEF4CA
+	const C_STROKE := Color(0.0, 0.0, 0.0, 0.6) # rgba(0,0,0,0.60)
+	const C_TEXT_PRI := Color(0.0, 0.0, 0.0) # text/primary  → black
+	const C_TEXT_SEC := Color(0.392, 0.388, 0.388) # text/secondary → #646363
+	const C_CIRCLE := Color(0.6, 0.776, 1.0) # #99C6FF placeholder
 
 	# TOP MENU — [spacer_l][left_panel][speed_days][right_panel][spacer_r]
 	# flex-1 spacers тримають три панелі разом по центру
@@ -1066,9 +1065,9 @@ func _build_top_bar() -> void:
 	lp_st.bg_color = C_PANEL_BG
 	lp_st.border_color = C_STROKE
 	lp_st.set_border_width_all(1)
-	lp_st.corner_radius_bottom_left  = 20
-	lp_st.content_margin_top    =  5.0; lp_st.content_margin_bottom =  5.0
-	lp_st.content_margin_left   = 25.0; lp_st.content_margin_right  = 25.0
+	lp_st.corner_radius_bottom_left = 20
+	lp_st.content_margin_top = 5.0; lp_st.content_margin_bottom = 5.0
+	lp_st.content_margin_left = 25.0; lp_st.content_margin_right = 25.0
 
 	var left_panel := PanelContainer.new()
 	left_panel.add_theme_stylebox_override("panel", lp_st)
@@ -1087,7 +1086,7 @@ func _build_top_bar() -> void:
 	var inv_box := Control.new()
 	inv_box.custom_minimum_size = Vector2(30, 30)
 	inv_box.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	inv_box.size_flags_vertical   = Control.SIZE_SHRINK_CENTER
+	inv_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	inv_box.clip_contents = true
 	left_hbox.add_child(inv_box)
 
@@ -1097,12 +1096,12 @@ func _build_top_bar() -> void:
 	_inventory_btn.pressed.connect(_toggle_inventory)
 	_inventory_btn.mouse_entered.connect(func(): FloatingLabel.show_label(tr("UI_INVENTORY") + " [color=gray][I][/color]"))
 	_inventory_btn.mouse_exited.connect(func(): FloatingLabel.hide_label())
-	var inv_st_n := StyleBoxFlat.new(); inv_st_n.bg_color = Color(0,0,0,0); inv_st_n.set_corner_radius_all(4)
-	var inv_st_h := StyleBoxFlat.new(); inv_st_h.bg_color = Color(0,0,0,0.1); inv_st_h.set_corner_radius_all(4)
-	_inventory_btn.add_theme_stylebox_override("normal",   inv_st_n)
-	_inventory_btn.add_theme_stylebox_override("hover",    inv_st_h)
-	_inventory_btn.add_theme_stylebox_override("focus",    inv_st_h)
-	_inventory_btn.add_theme_stylebox_override("pressed",  inv_st_h)
+	var inv_st_n := StyleBoxFlat.new(); inv_st_n.bg_color = Color(0, 0, 0, 0); inv_st_n.set_corner_radius_all(4)
+	var inv_st_h := StyleBoxFlat.new(); inv_st_h.bg_color = Color(0, 0, 0, 0.1); inv_st_h.set_corner_radius_all(4)
+	_inventory_btn.add_theme_stylebox_override("normal", inv_st_n)
+	_inventory_btn.add_theme_stylebox_override("hover", inv_st_h)
+	_inventory_btn.add_theme_stylebox_override("focus", inv_st_h)
+	_inventory_btn.add_theme_stylebox_override("pressed", inv_st_h)
 	_inventory_btn.add_theme_stylebox_override("disabled", inv_st_n)
 	inv_box.add_child(_inventory_btn)
 	_inventory_btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -1110,7 +1109,7 @@ func _build_top_bar() -> void:
 	var inv_label := Label.new()
 	inv_label.text = "⛺️"
 	inv_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	inv_label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	inv_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	inv_label.add_theme_font_size_override("font_size", 24)
 	inv_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inv_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -1170,10 +1169,10 @@ func _build_top_bar() -> void:
 	days_st.bg_color = C_PANEL_BG
 	days_st.border_color = C_STROKE
 	days_st.set_border_width_all(1)
-	days_st.corner_radius_bottom_left  = 10
+	days_st.corner_radius_bottom_left = 10
 	days_st.corner_radius_bottom_right = 10
-	days_st.content_margin_top    =  5.0; days_st.content_margin_bottom =  5.0
-	days_st.content_margin_left   = 40.0; days_st.content_margin_right  = 40.0
+	days_st.content_margin_top = 5.0; days_st.content_margin_bottom = 5.0
+	days_st.content_margin_left = 40.0; days_st.content_margin_right = 40.0
 	var days_pill := PanelContainer.new()
 	days_pill.add_theme_stylebox_override("panel", days_st)
 	days_pill.custom_minimum_size = Vector2(140, 0)
@@ -1206,17 +1205,17 @@ func _build_top_bar() -> void:
 	circle_st.border_color = C_STROKE
 	circle_st.set_border_width_all(1)
 	circle_st.set_corner_radius_all(70)
-	circle_st.content_margin_top    = 5.0; circle_st.content_margin_bottom = 5.0
-	circle_st.content_margin_left   = 0.0; circle_st.content_margin_right  = 0.0
+	circle_st.content_margin_top = 5.0; circle_st.content_margin_bottom = 5.0
+	circle_st.content_margin_left = 0.0; circle_st.content_margin_right = 0.0
 	_day_circle_style = circle_st
 	var day_circle := PanelContainer.new()
 	day_circle.name = "DayCircle"
 	day_circle.add_theme_stylebox_override("panel", circle_st)
-	day_circle.anchor_left    = 0.5;  day_circle.anchor_right  = 0.5
-	day_circle.anchor_top     = 1.0;  day_circle.anchor_bottom = 1.0
-	day_circle.offset_left    = -70.0; day_circle.offset_right  = 70.0
-	day_circle.offset_top     = -140.0; day_circle.offset_bottom = 0.0
-	day_circle.pivot_offset   = Vector2(70.0, 70.0)
+	day_circle.anchor_left = 0.5; day_circle.anchor_right = 0.5
+	day_circle.anchor_top = 1.0; day_circle.anchor_bottom = 1.0
+	day_circle.offset_left = -70.0; day_circle.offset_right = 70.0
+	day_circle.offset_top = -140.0; day_circle.offset_bottom = 0.0
+	day_circle.pivot_offset = Vector2(70.0, 70.0)
 	day_circle.rotation_degrees = 180.0
 	_day_circle = day_circle
 	frame_day.add_child(day_circle)
@@ -1228,7 +1227,7 @@ func _build_top_bar() -> void:
 	sun_lbl.add_theme_font_size_override("font_size", 28)
 	sun_lbl.custom_minimum_size = Vector2(40, 40)
 	sun_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	sun_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	sun_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	circle_vbox.add_child(sun_lbl)
 	var circle_spacer := Control.new(); circle_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	circle_vbox.add_child(circle_spacer)
@@ -1236,7 +1235,7 @@ func _build_top_bar() -> void:
 	moon_lbl.add_theme_font_size_override("font_size", 28)
 	moon_lbl.custom_minimum_size = Vector2(40, 40)
 	moon_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	moon_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	moon_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	circle_vbox.add_child(moon_lbl)
 
 	# ── Права панель: py=10 px=25 gap=15 rounded-BR=20 border=1 ────────────────
@@ -1245,8 +1244,8 @@ func _build_top_bar() -> void:
 	rp_st.border_color = C_STROKE
 	rp_st.set_border_width_all(1)
 	rp_st.corner_radius_bottom_right = 20
-	rp_st.content_margin_top    = 10.0; rp_st.content_margin_bottom = 10.0
-	rp_st.content_margin_left   = 25.0; rp_st.content_margin_right  = 25.0
+	rp_st.content_margin_top = 10.0; rp_st.content_margin_bottom = 10.0
+	rp_st.content_margin_left = 25.0; rp_st.content_margin_right = 25.0
 	var right_panel := PanelContainer.new()
 	right_panel.add_theme_stylebox_override("panel", rp_st)
 	right_panel.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
@@ -1259,11 +1258,11 @@ func _build_top_bar() -> void:
 	right_panel.add_child(right_hbox)
 	var faction_labels: Array[Array] = [
 		["crown", tr("FACTION_CROWN") + ":"],
-		["sich",  tr("FACTION_SICH")  + ":"],
-		["orda",  tr("FACTION_ORDA")],
+		["sich", tr("FACTION_SICH") + ":"],
+		["orda", tr("FACTION_ORDA")],
 	]
 	for pair in faction_labels:
-		var key: String       = pair[0]
+		var key: String = pair[0]
 		var name_text: String = pair[1]
 		var f_hbox := HBoxContainer.new(); f_hbox.add_theme_constant_override("separation", 4)
 		right_hbox.add_child(f_hbox)
@@ -1289,15 +1288,15 @@ func _build_top_bar() -> void:
 func _debug_topbar_heights() -> void:
 	await get_tree().process_frame
 	var panels: Array[Array] = [
-		["Ліва",          _top_bar_root.get_child(1)],
+		["Ліва", _top_bar_root.get_child(1)],
 		["Центр (speed)", _speed_panel],
-		["Права",         _top_bar_root.get_child(3)],
+		["Права", _top_bar_root.get_child(3)],
 	]
 	for row in panels:
 		var label: String = row[0]
-		var p: Control    = row[1]
+		var p: Control = row[1]
 		var sb := p.get_theme_stylebox("panel") as StyleBoxFlat
-		var mt := sb.content_margin_top    if sb else 0.0
+		var mt := sb.content_margin_top if sb else 0.0
 		var mb := sb.content_margin_bottom if sb else 0.0
 		var cmin := p.get_combined_minimum_size().y
 		print("[TopBar] %s: margin_top=%.0f  margin_bottom=%.0f  (sum=%.0f)  content_min=%.1f  size.y=%.1f" % [
@@ -1348,58 +1347,58 @@ func _build_pause_label() -> void:
 
 func _build_discovery_notification_ui() -> void:
 	_discovery_panel = PanelContainer.new()
-	_discovery_panel.anchor_left   = 0.5
-	_discovery_panel.anchor_right  = 0.5
-	_discovery_panel.anchor_top    = 0.0
+	_discovery_panel.anchor_left = 0.5
+	_discovery_panel.anchor_right = 0.5
+	_discovery_panel.anchor_top = 0.0
 	_discovery_panel.anchor_bottom = 0.0
 	_discovery_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_discovery_panel.grow_vertical   = Control.GROW_DIRECTION_END
-	_discovery_panel.offset_top    = 160
-	_discovery_panel.mouse_filter  = Control.MOUSE_FILTER_IGNORE
-	_discovery_panel.modulate      = Color(1, 1, 1, 0)
+	_discovery_panel.grow_vertical = Control.GROW_DIRECTION_END
+	_discovery_panel.offset_top = 160
+	_discovery_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_discovery_panel.modulate = Color(1, 1, 1, 0)
 	var st := StyleBoxFlat.new()
 	st.bg_color = Color(0.10, 0.08, 0.04, 0.92)
 	st.border_color = Color(0.75, 0.62, 0.22)
 	st.set_border_width_all(2)
 	st.set_corner_radius_all(5)
-	st.content_margin_left   = 20; st.content_margin_right  = 20
-	st.content_margin_top    = 8;  st.content_margin_bottom = 8
+	st.content_margin_left = 20; st.content_margin_right = 20
+	st.content_margin_top = 8; st.content_margin_bottom = 8
 	_discovery_panel.add_theme_stylebox_override("panel", st)
 	_discovery_label = RichTextLabel.new()
-	_discovery_label.bbcode_enabled  = true
-	_discovery_label.fit_content     = true
-	_discovery_label.autowrap_mode   = TextServer.AUTOWRAP_OFF
-	_discovery_label.scroll_active   = false
-	_discovery_label.mouse_filter    = Control.MOUSE_FILTER_IGNORE
+	_discovery_label.bbcode_enabled = true
+	_discovery_label.fit_content = true
+	_discovery_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_discovery_label.scroll_active = false
+	_discovery_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_discovery_label.custom_minimum_size = Vector2(200, 0)
 	_discovery_panel.add_child(_discovery_label)
 	_hud.add_child(_discovery_panel)
 
 func _build_onboarding_panel() -> void:
 	_onboarding_panel = PanelContainer.new()
-	_onboarding_panel.anchor_left   = 0.5
-	_onboarding_panel.anchor_right  = 0.5
-	_onboarding_panel.anchor_top    = 1.0
+	_onboarding_panel.anchor_left = 0.5
+	_onboarding_panel.anchor_right = 0.5
+	_onboarding_panel.anchor_top = 1.0
 	_onboarding_panel.anchor_bottom = 1.0
 	_onboarding_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_onboarding_panel.grow_vertical   = Control.GROW_DIRECTION_BEGIN
+	_onboarding_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_onboarding_panel.offset_bottom = -80
-	_onboarding_panel.mouse_filter  = Control.MOUSE_FILTER_IGNORE
+	_onboarding_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var st := StyleBoxFlat.new()
 	st.bg_color = Color(0.07, 0.065, 0.055, 0.92)
 	st.border_color = Color(0.48, 0.38, 0.13)
 	st.set_border_width_all(2)
 	st.set_corner_radius_all(5)
-	st.content_margin_left   = 20
-	st.content_margin_right  = 20
-	st.content_margin_top    = 10
+	st.content_margin_left = 20
+	st.content_margin_right = 20
+	st.content_margin_top = 10
 	st.content_margin_bottom = 10
 	_onboarding_panel.add_theme_stylebox_override("panel", st)
 	_onboarding_label = RichTextLabel.new()
 	_onboarding_label.bbcode_enabled = true
-	_onboarding_label.fit_content    = true
-	_onboarding_label.scroll_active  = false
-	_onboarding_label.autowrap_mode  = TextServer.AUTOWRAP_OFF
+	_onboarding_label.fit_content = true
+	_onboarding_label.scroll_active = false
+	_onboarding_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_onboarding_panel.add_child(_onboarding_label)
 	_onboarding_panel.modulate.a = 0.0
 	_onboarding_panel.hide()
@@ -1677,10 +1676,10 @@ func _show_location_dialog(marker: Node2D) -> void:
 
 			var type_names_shop := {"weapon": tr("SLOT_WEAPON").to_lower(), "armor": tr("STAT_ARMOR").to_lower(), "helm": tr("STAT_HELMET").to_lower()}
 			for shop_item: Dictionary in shop_inventory:
-				var item_name: String  = tr(shop_item.get("name", "?"))
-				var item_type: String  = shop_item.get("type", "")
-				var buy_price: int     = shop_item.get("buy_price", 0)
-				var type_str: String   = type_names_shop.get(item_type, item_type)
+				var item_name: String = tr(shop_item.get("name", "?"))
+				var item_type: String = shop_item.get("type", "")
+				var buy_price: int = shop_item.get("buy_price", 0)
+				var type_str: String = type_names_shop.get(item_type, item_type)
 
 				var shop_row := HBoxContainer.new()
 				shop_row.add_theme_constant_override("separation", 8)
@@ -1837,13 +1836,13 @@ func _generate_recruit_candidates() -> Array:
 	for i: int in range(mini(3, pool.size())):
 		var max_hp: int = randi_range(36, 52)
 		result.append({
-			"name":    tr(pool[i]),
-			"hp":      max_hp,
-			"max_hp":  max_hp,
-			"morale":  randi_range(70, 100),
-			"level":   1,
-			"xp":      0,
-			"cost":    randi_range(80, 120)
+			"name": tr(pool[i]),
+			"hp": max_hp,
+			"max_hp": max_hp,
+			"morale": randi_range(70, 100),
+			"level": 1,
+			"xp": 0,
+			"cost": randi_range(80, 120)
 		})
 	return result
 
@@ -1881,16 +1880,16 @@ func _on_hire_recruit(loc_id: String, recruit_idx: int) -> void:
 	AudioManager.play_sfx("hire")
 	var squad: Array = cm.world_state.get("squad", [])
 	squad.append({
-		"name":                 r.get("name", "Козак"),
-		"hp":                   r.get("hp", 40),
-		"max_hp":               r.get("max_hp", 40),
-		"morale":               r.get("morale", 80),
-		"level":                1,
-		"xp":                   0,
-		"data_path":            "",
+		"name": r.get("name", "Козак"),
+		"hp": r.get("hp", 40),
+		"max_hp": r.get("max_hp", 40),
+		"morale": r.get("morale", 80),
+		"level": 1,
+		"xp": 0,
+		"data_path": "",
 		"weapon_resource_path": "res://src/resources/combat/weapons/saber.tres",
-		"armor_path":           "",
-		"helm_path":            ""
+		"armor_path": "",
+		"helm_path": ""
 	})
 	cm.world_state["squad"] = squad
 	recruits.remove_at(recruit_idx)
@@ -1901,19 +1900,19 @@ func _on_hire_recruit(loc_id: String, recruit_idx: int) -> void:
 
 func _cleared_desc(loc_type: String) -> String:
 	match loc_type:
-		"bandit_camp":    return tr("CLEARED_BANDIT_CAMP")
-		"tatar_camp":     return tr("CLEARED_TATAR_CAMP")
-		"ruins":          return tr("CLEARED_RUINS")
-		"crown_outpost":  return tr("CLEARED_CROWN_OUTPOST")
-		"fortress":       return tr("CLEARED_FORTRESS")
-		_:                return tr("MAP_LOCATION_CLEARED")
+		"bandit_camp": return tr("CLEARED_BANDIT_CAMP")
+		"tatar_camp": return tr("CLEARED_TATAR_CAMP")
+		"ruins": return tr("CLEARED_RUINS")
+		"crown_outpost": return tr("CLEARED_CROWN_OUTPOST")
+		"fortress": return tr("CLEARED_FORTRESS")
+		_: return tr("MAP_LOCATION_CLEARED")
 
 func _faction_label(faction: String) -> String:
 	match faction:
-		"orda":  return tr("FACTION_ORDA_PLURAL")
+		"orda": return tr("FACTION_ORDA_PLURAL")
 		"crown": return tr("FACTION_CROWN_PLURAL")
-		"sich":  return tr("FACTION_SICH_PLURAL")
-		_:       return tr("FACTION_BANDITS")
+		"sich": return tr("FACTION_SICH_PLURAL")
+		_: return tr("FACTION_BANDITS")
 
 func _make_dialog_btn(text: String, base_color: Color) -> Button:
 	var btn := Button.new()
@@ -2247,7 +2246,7 @@ func _process(delta: float) -> void:
 	if world_ticking and _player_party and _player_party.is_moving:
 		var cm := get_node_or_null("/root/CampaignManager")
 		if cm:
-			_day_time += 150.0 * _speed_multiplier * delta  # PlayerParty.SPEED
+			_day_time += 150.0 * _speed_multiplier * delta # PlayerParty.SPEED
 			while _day_time >= PIXELS_PER_DAY:
 				_day_time -= PIXELS_PER_DAY
 				cm.world_state["day"] = cm.world_state.get("day", 1) + 1
@@ -2269,7 +2268,7 @@ func _process(delta: float) -> void:
 	_update_day_night(delta)
 
 func _update_day_night(delta: float) -> void:
-	var phase: float = _day_time / PIXELS_PER_DAY  # 0.0 → 1.0
+	var phase: float = _day_time / PIXELS_PER_DAY # 0.0 → 1.0
 
 	# Фази: 0–0.57 день, 0.57–0.64 захід, 0.64–0.93 ніч, 0.93–1.0 схід
 	var mod_color: Color
@@ -2298,8 +2297,8 @@ func _update_day_night(delta: float) -> void:
 
 	# Колір кола: Blue-300 (#99C6FF) вдень → Blue-950 (#002C5B) вночі
 	if is_instance_valid(_day_circle_style):
-		const C_BLUE_300 := Color(0.6,   0.776, 1.0  )   # #99C6FF
-		const C_BLUE_950 := Color(0.0,   0.173, 0.357)   # #002C5B
+		const C_BLUE_300 := Color(0.6, 0.776, 1.0) # #99C6FF
+		const C_BLUE_950 := Color(0.0, 0.173, 0.357) # #002C5B
 		var circle_color: Color
 		if phase < 0.57:
 			circle_color = C_BLUE_300
@@ -2405,17 +2404,17 @@ func _build_speed_panel() -> Control:
 	var panel := PanelContainer.new()
 	_speed_panel = panel
 	var st := StyleBoxFlat.new()
-	st.bg_color = Color(0.996, 0.957, 0.792)   # #FEF4CA
+	st.bg_color = Color(0.996, 0.957, 0.792) # #FEF4CA
 	st.border_color = Color(0.0, 0.0, 0.0, 0.6)
 	st.set_border_width_all(1)
-	st.corner_radius_bottom_left  = 15
+	st.corner_radius_bottom_left = 15
 	st.corner_radius_bottom_right = 15
-	st.content_margin_left   = 25.0
-	st.content_margin_right  = 25.0
-	st.content_margin_top    = 10.0
+	st.content_margin_left = 25.0
+	st.content_margin_right = 25.0
+	st.content_margin_top = 10.0
 	st.content_margin_bottom = 10.0
 	panel.add_theme_stylebox_override("panel", st)
-	panel.z_index = 3  # вище за days_pill(2) і frame_day(1) — поверх кола
+	panel.z_index = 3 # вище за days_pill(2) і frame_day(1) — поверх кола
 
 	var hbox := HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 10)
@@ -2496,11 +2495,11 @@ func _make_speed_tex_btn(tex_n: Texture2D, tex_h: Texture2D, tex_p: Texture2D, t
 
 func _refresh_speed_btns() -> void:
 	var pause_active := _is_paused
-	var play_active  := not _is_paused and _speed_multiplier == 1
-	var fwd_active   := not _is_paused and _speed_multiplier == 2
-	_apply_speed_btn_state(_pause_btn,  pause_active, _tex_pause_default, _tex_pause_hover, _tex_pause_active)
-	_apply_speed_btn_state(_speed1_btn, play_active,  _tex_play_default,  _tex_play_hover,  _tex_play_active)
-	_apply_speed_btn_state(_speed2_btn, fwd_active,   _tex_fwd_default,   _tex_fwd_hover,   _tex_fwd_active)
+	var play_active := not _is_paused and _speed_multiplier == 1
+	var fwd_active := not _is_paused and _speed_multiplier == 2
+	_apply_speed_btn_state(_pause_btn, pause_active, _tex_pause_default, _tex_pause_hover, _tex_pause_active)
+	_apply_speed_btn_state(_speed1_btn, play_active, _tex_play_default, _tex_play_hover, _tex_play_active)
+	_apply_speed_btn_state(_speed2_btn, fwd_active, _tex_fwd_default, _tex_fwd_hover, _tex_fwd_active)
 	if is_instance_valid(_pause_label):
 		_pause_label.visible = _is_paused
 
@@ -2510,16 +2509,16 @@ func _apply_speed_btn_state(btn: TextureButton, is_active: bool,
 	if not is_instance_valid(btn):
 		return
 	if is_active:
-		btn.texture_normal   = tex_act
-		btn.texture_hover    = tex_act
-		btn.texture_pressed  = tex_act
+		btn.texture_normal = tex_act
+		btn.texture_hover = tex_act
+		btn.texture_pressed = tex_act
 		btn.texture_disabled = tex_act
 		btn.disabled = true
 	else:
 		btn.disabled = false
-		btn.texture_normal   = tex_def
-		btn.texture_hover    = tex_hov
-		btn.texture_pressed  = tex_act
+		btn.texture_normal = tex_def
+		btn.texture_hover = tex_hov
+		btn.texture_pressed = tex_act
 		btn.texture_disabled = null
 
 func _make_speed_btn(label_text: String, tip: String) -> Button:
@@ -2548,27 +2547,27 @@ func _make_speed_btn(label_text: String, tip: String) -> Button:
 func _build_inventory_panel() -> void:
 	_inventory_panel = PanelContainer.new()
 	_inventory_panel.name = "InventoryPanel"
-	_inventory_panel.anchor_left   = 1.0
-	_inventory_panel.anchor_right  = 1.0
-	_inventory_panel.anchor_top    = 0.0
+	_inventory_panel.anchor_left = 1.0
+	_inventory_panel.anchor_right = 1.0
+	_inventory_panel.anchor_top = 0.0
 	_inventory_panel.anchor_bottom = 1.0
-	_inventory_panel.offset_left   = -320
-	_inventory_panel.offset_right  = -10
-	_inventory_panel.offset_top    = 72
+	_inventory_panel.offset_left = -320
+	_inventory_panel.offset_right = -10
+	_inventory_panel.offset_top = 72
 	_inventory_panel.offset_bottom = -10
 	_inventory_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 
 	var pst := StyleBoxFlat.new()
-	pst.bg_color     = Color(0.06, 0.055, 0.045, 0.95)
+	pst.bg_color = Color(0.06, 0.055, 0.045, 0.95)
 	pst.border_color = Color(0.35, 0.28, 0.1)
 	pst.set_border_width_all(2)
 	pst.set_corner_radius_all(5)
 	_inventory_panel.add_theme_stylebox_override("panel", pst)
 
 	var mc := MarginContainer.new()
-	mc.add_theme_constant_override("margin_left",   12)
-	mc.add_theme_constant_override("margin_right",  12)
-	mc.add_theme_constant_override("margin_top",    12)
+	mc.add_theme_constant_override("margin_left", 12)
+	mc.add_theme_constant_override("margin_right", 12)
+	mc.add_theme_constant_override("margin_top", 12)
 	mc.add_theme_constant_override("margin_bottom", 12)
 	_inventory_panel.add_child(mc)
 
@@ -2639,8 +2638,8 @@ func _refresh_squad_row() -> void:
 
 	const NAME_TO_SPRITE: Dictionary = {
 		"Ничипір": "nychypir", "Havrylo": "havrylo",
-		"Гаврило": "havrylo",  "Тимофій": "tymofiy",
-		"Панько":  "panko",
+		"Гаврило": "havrylo", "Тимофій": "tymofiy",
+		"Панько": "panko",
 	}
 	var fallback_sprites: Array[String] = ["nychypir", "havrylo", "tymofiy", "panko"]
 	for unit in squad:
@@ -2655,11 +2654,11 @@ func _refresh_squad_row() -> void:
 		st.set_border_width_all(2 if is_sel else 1)
 		st.set_corner_radius_all(3)
 		st.content_margin_left = 4; st.content_margin_right = 4
-		st.content_margin_top = 4;  st.content_margin_bottom = 4
+		st.content_margin_top = 4; st.content_margin_bottom = 4
 		var hover_st := st.duplicate() as StyleBoxFlat
 		hover_st.bg_color = Color(0.18, 0.14, 0.09)
-		btn.add_theme_stylebox_override("normal",  st)
-		btn.add_theme_stylebox_override("hover",   hover_st)
+		btn.add_theme_stylebox_override("normal", st)
+		btn.add_theme_stylebox_override("hover", hover_st)
 		btn.add_theme_stylebox_override("pressed", hover_st)
 		var hb := HBoxContainer.new()
 		hb.add_theme_constant_override("separation", 10)
@@ -2737,20 +2736,20 @@ func _refresh_equipment_section() -> void:
 	var ws: Dictionary = cm.world_state
 	var slot_types: Dictionary = {
 		"weapon_resource_path": "weapon",
-		"armor_path":           "armor",
-		"helm_path":            "helm",
+		"armor_path": "armor",
+		"helm_path": "helm",
 	}
 	# [slot_key or null, slot_label, icon_if_empty]
 	var grid_def: Array = [
-		[null,                   tr("SLOT_TRINKET"), "○"],
-		["helm_path",            tr("STAT_HELMET"),  "○"],
-		[null,                   tr("SLOT_AMMO"),    "○"],
-		["weapon_resource_path", tr("SLOT_WEAPON"),  "○"],
-		["armor_path",           tr("STAT_ARMOR"),   "○"],
-		[null,                   tr("SLOT_SHIELD"),  "○"],
-		[null,                   tr("SLOT_BELT"),    "○"],
-		[null,                   tr("SLOT_BELT"),    "○"],
-		[null,                   tr("SLOT_BELT"),    "○"],
+		[null, tr("SLOT_TRINKET"), "○"],
+		["helm_path", tr("STAT_HELMET"), "○"],
+		[null, tr("SLOT_AMMO"), "○"],
+		["weapon_resource_path", tr("SLOT_WEAPON"), "○"],
+		["armor_path", tr("STAT_ARMOR"), "○"],
+		[null, tr("SLOT_SHIELD"), "○"],
+		[null, tr("SLOT_BELT"), "○"],
+		[null, tr("SLOT_BELT"), "○"],
+		[null, tr("SLOT_BELT"), "○"],
 	]
 
 	var grid := GridContainer.new()
@@ -2761,11 +2760,11 @@ func _refresh_equipment_section() -> void:
 
 	var _cell_idx: int = 0
 	for cell in grid_def:
-		var slot_key: Variant  = cell[0]
+		var slot_key: Variant = cell[0]
 		var slot_label: String = cell[1]
-		var is_active: bool    = (slot_key != null)
-		var res_path: String   = unit.get(slot_key as String, "") if is_active else ""
-		var is_filled: bool    = is_active and not res_path.is_empty()
+		var is_active: bool = (slot_key != null)
+		var res_path: String = unit.get(slot_key as String, "") if is_active else ""
+		var is_filled: bool = is_active and not res_path.is_empty()
 		@warning_ignore("integer_division")
 		var _cell_row: int = _cell_idx / 3
 		var _slot_size: Vector2 = Vector2(100, 180) if _cell_row == 1 else Vector2(100, 100)
@@ -2774,8 +2773,8 @@ func _refresh_equipment_section() -> void:
 		var icon: String = "○"
 		if is_filled:
 			match (slot_key as String):
-				"helm_path":            icon = "🪖"
-				"armor_path":           icon = "🛡️"
+				"helm_path": icon = "🪖"
+				"armor_path": icon = "🛡️"
 				"weapon_resource_path":
 					icon = "⚔️"
 					if ResourceLoader.exists(res_path):
@@ -2803,8 +2802,8 @@ func _refresh_equipment_section() -> void:
 
 		# ── Стиль (точний з CharacterSheet._equipment_slot рядки 350-353) ─────
 		var base_st := StyleBoxFlat.new()
-		base_st.bg_color     = Color(0.13, 0.11, 0.07)   if is_filled else Color(0.055, 0.055, 0.065)
-		base_st.border_color = Color(0.48, 0.38, 0.13)   if is_filled else Color(0.18, 0.18, 0.2)
+		base_st.bg_color = Color(0.13, 0.11, 0.07) if is_filled else Color(0.055, 0.055, 0.065)
+		base_st.border_color = Color(0.48, 0.38, 0.13) if is_filled else Color(0.18, 0.18, 0.2)
 		base_st.set_border_width_all(2)
 		base_st.set_corner_radius_all(4)
 
@@ -2875,7 +2874,7 @@ func _refresh_equipment_section() -> void:
 				slot.add_theme_stylebox_override("panel", base_st))
 
 			if is_filled:
-				var cap_key: String  = slot_key as String
+				var cap_key: String = slot_key as String
 				var cap_type: String = slot_types.get(cap_key, "weapon")
 				var cap_path: String = res_path
 				slot.gui_input.connect(func(ev: InputEvent) -> void:
@@ -2909,8 +2908,8 @@ func _refresh_equipment_section() -> void:
 	else:
 		var d := load(data_path)
 		var melee_skill: int = unit.get("stat_melee_skill",
-			int(d.get("base_melee_skill"))   if d else 0)
-		var melee_def: int   = unit.get("stat_melee_defense",
+			int(d.get("base_melee_skill")) if d else 0)
+		var melee_def: int = unit.get("stat_melee_defense",
 			int(d.get("base_melee_defense")) if d else 0)
 
 		var body_hp := 0
@@ -2963,11 +2962,11 @@ func _refresh_inventory_section() -> void:
 	var type_names := {"weapon": tr("SLOT_WEAPON").to_lower(), "armor": tr("STAT_ARMOR").to_lower(), "helm": tr("STAT_HELMET").to_lower()}
 
 	for item in inventory:
-		var item_id: String   = item.get("id", "")
+		var item_id: String = item.get("id", "")
 		var item_name: String = tr(item.get("name", "?"))
 		var item_type: String = item.get("type", "")
-		var sell_price: int   = item.get("sell_price", 0)
-		var type_str: String  = type_names.get(item_type, item_type)
+		var sell_price: int = item.get("sell_price", 0)
+		var type_str: String = type_names.get(item_type, item_type)
 
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 4)
