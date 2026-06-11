@@ -552,7 +552,7 @@ func _update_entity_visibility_and_discovery() -> void:
 						var loc_name_str := str(loc_name_val) if loc_name_val != null else "Нова локація"
 						_show_discovery_notification("[color=gold]" + tr("MAP_DISCOVERED") % loc_name_str + "[/color]")
 						
-						print("Гравець виявив нову локацію: ", loc_name_str)
+						if Globals.DEBUG_LOG: print("Гравець виявив нову локацію: ", loc_name_str)
 					else:
 						marker.visible = false
 				else:
@@ -1299,7 +1299,7 @@ func _debug_topbar_heights() -> void:
 		var mt := sb.content_margin_top if sb else 0.0
 		var mb := sb.content_margin_bottom if sb else 0.0
 		var cmin := p.get_combined_minimum_size().y
-		print("[TopBar] %s: margin_top=%.0f  margin_bottom=%.0f  (sum=%.0f)  content_min=%.1f  size.y=%.1f" % [
+		if Globals.DEBUG_LOG: print("[TopBar] %s: margin_top=%.0f  margin_bottom=%.0f  (sum=%.0f)  content_min=%.1f  size.y=%.1f" % [
 			label, mt, mb, mt + mb, cmin, p.size.y])
 
 
@@ -2172,13 +2172,13 @@ func _input(event: InputEvent) -> void:
 
 	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
 		return
-	print("[WorldMap] LMB click detected")
+	if Globals.DEBUG_LOG: print("[WorldMap] LMB click detected")
 	if _encounter_dialog.visible or _location_dialog.visible:
-		print("[WorldMap] blocked by encounter dialog")
+		if Globals.DEBUG_LOG: print("[WorldMap] blocked by encounter dialog")
 		return
 	var mouse_vp := get_viewport().get_mouse_position()
 	if _is_click_on_hud(mouse_vp):
-		print("[WorldMap] blocked by HUD at ", mouse_vp)
+		if Globals.DEBUG_LOG: print("[WorldMap] blocked by HUD at ", mouse_vp)
 		return
 	if not is_instance_valid(_player_party):
 		print("[WorldMap] ERROR: _player_party is null!")
@@ -2198,10 +2198,10 @@ func _input(event: InputEvent) -> void:
 				min_dist = d
 
 	if clicked_enemy:
-		print("[WorldMap] Enemy clicked! Pursuing: ", clicked_enemy)
+		if Globals.DEBUG_LOG: print("[WorldMap] Enemy clicked! Pursuing: ", clicked_enemy)
 		_player_party.set_pursuit_target(clicked_enemy)
 	else:
-		print("[WorldMap] set_target -> ", world_pos, " (player at ", _player_party.position, ")")
+		if Globals.DEBUG_LOG: print("[WorldMap] set_target -> ", world_pos, " (player at ", _player_party.position, ")")
 		_player_party.set_target(world_pos)
 
 	get_viewport().set_input_as_handled()

@@ -336,7 +336,7 @@ func update_sprite() -> void:
 	var key: String = _get_sprite_key()
 	var front_path: String = "res://assets/sprites/units/%s_front.png" % key
 	var back_path: String = "res://assets/sprites/units/%s_back.png" % key
-	print("  update_sprite: '%s' key='%s' front_exists=%s" % [name, key, ResourceLoader.exists(front_path)])
+	if Globals.DEBUG_LOG: print("  update_sprite: '%s' key='%s' front_exists=%s" % [name, key, ResourceLoader.exists(front_path)])
 
 	if ResourceLoader.exists(front_path) and ResourceLoader.exists(back_path):
 		_sprite_front = load(front_path)
@@ -354,6 +354,8 @@ func update_sprite() -> void:
 		else:
 			_sprite.texture = _sprite_front
 			_sprite.flip_h = true
+
+		_apply_visual_identity()
 	else:
 		# Fallback: видаляємо порожній Sprite2D, повертаємось до Polygon2D
 		if _sprite:
@@ -377,6 +379,41 @@ func update_sprite() -> void:
 		active_line.default_color = Color.WHITE
 		active_line.visible = false
 		add_child(active_line)
+
+# Тимчасові відтінки для рекрутів, що ділять один спрайт (поки немає унікальних)
+const RECRUIT_TINTS: Array[Color] = [
+	Color(1.00, 0.86, 0.86), # рожевуватий
+	Color(0.86, 1.00, 0.86), # зеленуватий
+	Color(0.85, 0.92, 1.00), # блакитнуватий
+	Color(1.00, 1.00, 0.82), # жовтуватий
+	Color(0.98, 0.88, 1.00), # бузковий
+	Color(0.85, 1.00, 1.00), # бірюзовий
+]
+
+# Візуальна ідентичність через self_modulate — НЕ конфліктує з modulate,
+# який використовується для підсвітки активного юніта та флешу від ударів.
+func _apply_visual_identity() -> void:
+	if not _sprite: return
+	_sprite.self_modulate = Color.WHITE
+	_sprite.scale = Vector2(0.7, 0.7)
+
+	if team == 0:
+		# Оригінальні персонажі зі своїми спрайтами — без відтінку
+		for cyr_name in NAME_TO_SPRITE:
+			if name.contains(cyr_name):
+				return
+		# Рекрут: детермінований відтінок за ім'ям — стабільний між боями
+		_sprite.self_modulate = RECRUIT_TINTS[abs(hash(str(name))) % RECRUIT_TINTS.size()]
+	else:
+		var ref: String = (data.resource_path if data else "")
+		if ref.is_empty():
+			ref = str(name)
+		if "BanditLeader" in ref or "Отаман" in ref:
+			_sprite.self_modulate = Color(1.00, 0.84, 0.55) # золотавий — ватажок
+			_sprite.scale = Vector2(0.78, 0.78)
+		elif "TatarHeavy" in ref or "Татарський" in ref:
+			_sprite.self_modulate = Color(0.74, 0.78, 0.86) # сталевий — важкий
+			_sprite.scale = Vector2(0.78, 0.78)
 
 func start_turn(is_new_round: bool = true) -> void:
 	if is_dead: return

@@ -14,3 +14,6 @@ const STAMINA_ATTACK_COST = 15
 
 const CHANCE_MIN = 5
 const CHANCE_MAX = 95
+
+# Глобальний прапорець debug-логів: увімкни true під час налагодження
+const DEBUG_LOG := true

@@ -34,10 +34,10 @@ func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.902, 0.835, 0.722, 1)) # степ #E6D5B8
 
 	# Чекаємо один кадр, щоб всі _ready в сцені завершились і вузли стали стабільними
-	print("BattleManager: _ready() починається...")
+	if Globals.DEBUG_LOG: print("BattleManager: _ready() починається...")
 	await get_tree().process_frame
 
-	print("BattleManager: Старт системи...")
+	if Globals.DEBUG_LOG: print("BattleManager: Старт системи...")
 
 	# Налаштовуємо ворогів з конфігу кампанії (до ініціалізації черги)
 	var cm = get_node_or_null("/root/CampaignManager")
@@ -58,7 +58,7 @@ func _ready() -> void:
 		var save_mgr = get_node_or_null("/root/SaveManager")
 		if save_mgr and save_mgr.load_game():
 			squad_data = save_mgr.squad_data
-	print("BattleManager: squad_data.size() = ", squad_data.size())
+	if Globals.DEBUG_LOG: print("BattleManager: squad_data.size() = ", squad_data.size())
 
 	if not squad_data.is_empty():
 		var player_nodes = []
@@ -133,11 +133,11 @@ func _ready() -> void:
 	log_message("--- ⚔️ " + tr("BATTLE_STARTED") % 1 + " ---", Color.GOLD)
 	
 	# Ініціалізація юнітів (позиція та мораль)
-	print("--- BattleManager: Unit Starting Positions ---")
+	if Globals.DEBUG_LOG: print("--- BattleManager: Unit Starting Positions ---")
 	for child in get_parent().get_children():
 		if child is CombatUnit:
 			var m_pos = IsoMath.local_to_map(child.position)
-			print("Unit: ", child.name, " team: ", child.team, " pos: ", child.position, " map_pos: ", m_pos, " dead: ", child.is_dead)
+			if Globals.DEBUG_LOG: print("Unit: ", child.name, " team: ", child.team, " pos: ", child.position, " map_pos: ", m_pos, " dead: ", child.is_dead)
 			child.position = IsoMath.get_cell_center(m_pos)
 			child.roll_starting_morale()
 			
@@ -151,7 +151,7 @@ func _ready() -> void:
 		_build_tutorial_panel()
 
 	start_next_unit_turn.call_deferred()
-	print("BattleManager: _ready() ЗАВЕРШЕНО")
+	if Globals.DEBUG_LOG: print("BattleManager: _ready() ЗАВЕРШЕНО")
 
 func _on_skill_selected(id: String) -> void:
 	# Toggle logic: якщо клікнути на вже обрану — вона скидається
@@ -160,7 +160,7 @@ func _on_skill_selected(id: String) -> void:
 	else:
 		current_skill_id = id
 
-	print("Навичок: %s" % (current_skill_id if current_skill_id != "" else "Move Mode"))
+	if Globals.DEBUG_LOG: print("Навичок: %s" % (current_skill_id if current_skill_id != "" else "Move Mode"))
 	if tile_map: tile_map.queue_redraw()
 	if unit_panel: unit_panel.update_unit_info(active_unit)
 
@@ -505,7 +505,7 @@ func _setup_turn_queue_ui() -> void:
 	queue_ui.set_script(load("res://src/ui/TurnQueueUI.gd"))
 	ui_layer.add_child(queue_ui)
 	ui_layer.move_child(queue_ui, 0) # Кладемо на самий низ (під оверлей)
-	print("BattleManager: TurnQueueUI автоматично додано до UI.")
+	if Globals.DEBUG_LOG: print("BattleManager: TurnQueueUI автоматично додано до UI.")
 
 func _style_end_turn_button() -> void:
 	var btn = get_node_or_null("../UI/EndTurnButton")
@@ -658,7 +658,7 @@ func _center_camera() -> void:
 	var center_y = (size - 1) * 40.0
 	camera.position = Vector2(0, center_y)
 	
-	print("BattleManager: Камеру центровано на (0, ", center_y, ") для GRID_SIZE ", size)
+	if Globals.DEBUG_LOG: print("BattleManager: Камеру центровано на (0, ", center_y, ") для GRID_SIZE ", size)
 
 ## Призначає UnitData ворожим вузлам зі сцені на основі конфігу CampaignManager.
 ## Викликається один раз при старті бою.
@@ -677,7 +677,7 @@ func _apply_enemy_config(config: Dictionary) -> void:
 	]
 
 	var paths: Array = config.get("enemy_data_paths", [])
-	print("BattleManager: _apply_enemy_config — вузлів ворогів: %d, шляхів: %d" % [enemy_nodes.size(), paths.size()])
+	if Globals.DEBUG_LOG: print("BattleManager: _apply_enemy_config — вузлів ворогів: %d, шляхів: %d" % [enemy_nodes.size(), paths.size()])
 	for i in range(enemy_nodes.size()):
 		if i < paths.size():
 			var enemy = enemy_nodes[i]
@@ -693,10 +693,10 @@ func _apply_enemy_config(config: Dictionary) -> void:
 				if enemy is CombatUnit:
 					enemy.setup_from_data()
 					var _d = enemy.get("data")
-					print("BattleManager: update_sprite() ДО  — enemy[%d] name='%s' data_path='%s'" % [
+					if Globals.DEBUG_LOG: print("BattleManager: update_sprite() ДО  — enemy[%d] name='%s' data_path='%s'" % [
 						i, enemy.name, _d.resource_path if _d else "null"])
 					enemy.update_sprite()
-					print("BattleManager: update_sprite() ПІСЛЯ — enemy[%d] OK" % i)
+					if Globals.DEBUG_LOG: print("BattleManager: update_sprite() ПІСЛЯ — enemy[%d] OK" % i)
 		else:
 			# Повністю видаляємо зайві вузли ворогів
 			var enemy = enemy_nodes[i]

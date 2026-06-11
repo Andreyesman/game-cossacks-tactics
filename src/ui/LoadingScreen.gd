@@ -17,8 +17,15 @@ func _ready() -> void:
 
 func _on_fade_in_finished() -> void:
 	print("LoadingScreen: fade завершено — завантажуємо Battle...")
-	# Надійно і відкладено завантажуємо сцену
-	get_tree().call_deferred("change_scene_to_file", TARGET)
+	_change_scene_staged.call_deferred()
+
+# Діагностична версія переходу: розбито на етапи, щоб бачити, де саме висне
+func _change_scene_staged() -> void:
+	print("LoadingScreen: [1/3] load(Battle.tscn) почався...")
+	var packed: PackedScene = load(TARGET)
+	print("LoadingScreen: [2/3] load() завершено, packed valid=", is_instance_valid(packed) if packed else false)
+	var err := get_tree().change_scene_to_packed(packed)
+	print("LoadingScreen: [3/3] change_scene_to_packed -> ", error_string(err))
 
 func _build_ui() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
