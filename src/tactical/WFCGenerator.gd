@@ -367,8 +367,12 @@ func _carve_river(terrain_map: Dictionary) -> void:
 		current  = Vector2i(_rng.randi_range(3, GRID_SIZE - 4), 0)
 		end_pos  = Vector2i(_rng.randi_range(3, GRID_SIZE - 4), GRID_SIZE - 1)
 
-	# Крокова генерація: рухаємось по головній осі, зрідка коригуємо другорядну
-	while current != end_pos:
+	# Крокова генерація: рухаємось по головній осі, зрідка коригуємо другорядну.
+	# Запобіжник guard: раніше clamp обох осей робив end_pos (на краю карти)
+	# недосяжним — вічний цикл і зависання на завантаженні бою.
+	var guard: int = 0
+	while current != end_pos and guard < GRID_SIZE * GRID_SIZE:
+		guard += 1
 		river_cells.append(current)
 
 		var diff_main: int
@@ -396,8 +400,11 @@ func _carve_river(terrain_map: Dictionary) -> void:
 		else:
 			current = current + step_main
 
-		current.x = clamp(current.x, 1, GRID_SIZE - 2)
-		current.y = clamp(current.y, 1, GRID_SIZE - 2)
+		# Клемп лише ПОПЕРЕЧНОЇ осі: вздовж течії річка мусить дійти до краю (end_pos)
+		if horizontal:
+			current.y = clamp(current.y, 1, GRID_SIZE - 2)
+		else:
+			current.x = clamp(current.x, 1, GRID_SIZE - 2)
 
 	river_cells.append(end_pos)
 
