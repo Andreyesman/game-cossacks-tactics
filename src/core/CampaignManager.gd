@@ -9,7 +9,12 @@ var world_state: Dictionary = {}
 #   "thalers": int,
 #   "provisions": int,
 #   "faction_rep": {"crown": int, "sich": int, "orda": int},
-#   "biomes": Array[Dictionary],       # [{id, rect, color, faction}]
+#   "forest_patches": Array[Dictionary], # географія: [{x, y, r, outer, inner}]
+#   "hill_patches": Array[Dictionary],   # [{x, y, r, verts}]
+#   "swamp_patches": Array[Dictionary],  # [{x, y, r, verts}]
+#   "kurgans": Array[Dictionary],        # [{x, y}]
+#   "ravines": Array[Array],             # [[{x,y},...], ...]
+#   "influence_anchors": Array[Dictionary], # зони впливу: [{faction, pos}] (Voronoi по містах)
 #   "rivers": Array[Array],            # [[Vector2,...], ...]
 #   "lakes": Array[Array],             # [[Vector2,...], ...]
 #   "roads": Array[Array],             # [[Vector2, Vector2], ...]
@@ -42,7 +47,6 @@ func new_campaign() -> void:
 		"provisions": 10,
 		"tutorial_done": false,
 		"faction_rep": {"crown": 0, "sich": 0, "orda": 0},
-		"biomes": [],
 		"rivers": [],
 		"lakes": [],
 		"roads": [],
