@@ -1,6 +1,7 @@
 # Імплементаційний план «Козацька Варта»
 
 **Поточний фокус:** Фаза 3.5 — Візуальне наповнення  
+**✅ Сесія 12.06.2026 (v4.7) — ФІКС зависання бою (вічний цикл річки), XP вбивці, ZoC-шкода від зброї, OGG-музика (−61 МБ), відтінки юнітів, DEBUG_LOG, GitHub + filesystem MCP, аудит проєкту — див. секцію 0**
 **✅ TopBar висоти 56px (v4.6 — 09.06.2026) — ліва панель margin 15px, inventory wrapped у Control 32×32**  
 **✅ Speed buttons TextureButton + 9 SVG Figma (v4.5 — 09.06.2026) — radio-group логіка, _apply_speed_btn_state()**  
 **✅ Pause button SVG іконки з Figma (v4.4 — 09.06.2026) — три стани: default/hover/active, assets/sprites/ui/**  
@@ -14,6 +15,47 @@
 **✅ Фаза 3 — Локалізація + Аудіо — ЗАВЕРШЕНО (v3.6)**
 
 **✅ Фаза 1 — Progression Loop — ЗАВЕРШЕНО** (гра playable на 5+ боїв)
+
+---
+
+## 0. Сесія 12.06.2026 (v4.7) — стабілізація, інфраструктура, аудит ✅
+
+### 0.1 Виправлення
+
+| # | Задача | Файли |
+|---|--------|--------|
+| 0.1.1 | **КРИТИЧНИЙ фікс: зависання на завантаженні бою** — `_carve_river()` мав вічний цикл: `end_pos` лежав на краю карти (x/y = GRID_SIZE−1), а clamp обох осей обмежував `current` до GRID_SIZE−2 — ціль недосяжна. Кожна карта біому RIVER вішала гру зі 100% ймовірністю (виглядало як плаваючий баг через випадковий вибір біому). Фікс: clamp лише поперечної осі + запобіжник guard (GRID_SIZE² ітерацій) | `WFCGenerator.gd` |
+| 0.1.2 | **XP за вбивство — вбивці** — `take_damage()`/`die()` приймають `killer`; всі 3 типи атак передають `self`. Вбивця (вкл. стрілець з дистанції) отримує повний XP, свідки в радіусі 3 — половину | `CombatUnit.gd` |
+| 0.1.3 | **Шкода опортуністичної атаки від зброї** — замість хардкоду 20–35: `damage_min/max` + `armor_penetration` + `armor_damage_modifier` зі зброї нападника (фолбек 20–35) | `CombatUnit.gd` |
+| 0.1.4 | **End Turn без get_stack()** — `get_stack()` в release-збірках повертає `[]`, захист мовчки зникав. Тепер окремий `_on_end_turn_pressed()` з явною перевіркою team; кнопка перепідключена в сцені | `BattleManager.gd`, `Battle.tscn` |
+| 0.1.5 | **Музика WAV→OGG** — battle_theme 36→2 МБ, map_theme 29→1.5 МБ (q:a 6); зациклення в коді AudioManager — без змін | `AudioManager.gd`, `assets/audio/music/` |
+| 0.1.6 | **Візуальні відтінки юнітів (тимчасово до фінального арту)** — `_apply_visual_identity()`: рекрути зі спільним спрайтом отримують детермінований відтінок з палітри 6; Отаман — золотавий + scale 0.78, TatarHeavy — сталевий + scale 0.78. Через `self_modulate` — не конфліктує з підсвіткою/флешем на `modulate` | `CombatUnit.gd` |
+| 0.1.7 | **Globals.DEBUG_LOG** — єдиний прапорець для 23 найгучніших debug-print'ів (BattleManager init, update_sprite, [TopBar], [WorldMap] кліки). Ігрові події (смерті, ZoC) залишено завжди видимими. При налагодженні — перемкнути на `true` | `Globals.gd` + 3 файли |
+| 0.1.8 | **LoadingScreen — поетапний перехід [1/3]–[3/3]** — load/instantiate розділено з маркерами; залишено навмисно для майбутньої діагностики зависань | `LoadingScreen.gd` |
+| 0.1.9 | **Назва проєкту** — `Goddot (CossacksTactics2)` → `Cossacks Tactics`. Увага: userdata-папка змінилась, старі збереження лишились у `app_userdata/Goddot (CossacksTactics2)` | `project.godot` |
+| 0.1.10 | **FontMetricsTool** — Python-ідіома `"-" * 60` → `"-".repeat(60)` (parse error у LSP) | `src/tools/FontMetricsTool.gd` |
+| 0.1.11 | **Битий шлях портрета** — `CossackData.tres` посилався на неіснуючу папку `ui/imports/figma_godot_export/`; виправлено на `ui/imports/MainMenu/images/` (рятував лише UID-механізм) | `CossackData.tres` |
+| 0.1.12 | **Дихання спрайтів затирало scale ватажків** — idle-анімація в `_process` щокадру ставила scale з хардкодом 0.7, перекреслюючи 0.78 для Отамана/TatarHeavy. Тепер база — `_base_sprite_scale` | `CombatUnit.gd` |
+| 0.1.13 | **Перф: find_child щокадру** — `TacticalGrid._process` робив рекурсивний `find_child("BattleManager")` + `get_node_or_null("UI")` 60 разів/сек; посилання кешовано з перевіркою валідності | `TacticalGrid.gd` |
+
+### 0.2 Інфраструктура
+
+- Проєкт перенесено з `Downloads` у `~/Projects/cossacks-tactics`
+- Git + GitHub: https://github.com/Andreyesman/game-cossacks-tactics (public)
+- Filesystem MCP в Claude Desktop — Claude читає/править файли проєкту напряму
+- Робочий цикл: зміни → тест через godot-mcp → Commit + Push у GitHub Desktop
+
+### 0.3 Аудит проєкту (12 категорій) — результати
+
+**Чисто:** пайтонівщини більше немає; debug-only API не лишилось; всі статичні load()/preload() валідні; сигнали сцен вказують на існуючі методи; локалізація — всі 190 вживаних ключів визначені; ділення на size() захищені; while-цикли поза WFC обмежені (IsoMath — Брезенгем).
+
+**Беклог з аудиту:**
+- [ ] `tile_trees.png` відсутній — дерева рендеряться fallback-ромбом (єдиний тайл без текстури). Потрібен арт 160×80
+- [ ] `translations.csv`: 172 визначених, але невикористаних ключів — почистити перед додаванням нових мов
+- [ ] Справжні спрайти для BanditLeader і TatarHeavy (зараз — тимчасовий відтінок+scale)
+- [ ] Перенести старі збереження з userdata-папки `Goddot (CossacksTactics2)` (якщо знадобляться)
+- [ ] CM/LoadingScreen print'и — загнати під DEBUG_LOG (крім маркерів [1/3]–[3/3])
+- [ ] **Перед релізом:** `UnitPanel._process` будує Dictionary щокадру для порівняння з кешем (GC-тиск) — перевести на сигнали hp/ap/stamina_changed (~2 год); `TurnQueueUI._process` так само. Перед експортом на слабкі машини — сесія з вбудованим профайлером Godot (Debugger → Profiler)
 
 ---
 

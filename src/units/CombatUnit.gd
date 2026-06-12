@@ -141,8 +141,8 @@ func _process(delta: float) -> void:
 	if is_dead or is_moving: return
 	if _sprite:
 		_idle_time += delta * 2.0
-		var scale_y = 0.7 + sin(_idle_time) * 0.015
-		var scale_x = 0.7 - sin(_idle_time) * 0.007
+		var scale_y = _base_sprite_scale + sin(_idle_time) * 0.015
+		var scale_x = _base_sprite_scale - sin(_idle_time) * 0.007
 		_sprite.scale = Vector2(scale_x, scale_y)
 
 func setup_from_data() -> void:
@@ -390,11 +390,14 @@ const RECRUIT_TINTS: Array[Color] = [
 	Color(0.85, 1.00, 1.00), # бірюзовий
 ]
 
+var _base_sprite_scale: float = 0.7
+
 # Візуальна ідентичність через self_modulate — НЕ конфліктує з modulate,
 # який використовується для підсвітки активного юніта та флешу від ударів.
 func _apply_visual_identity() -> void:
 	if not _sprite: return
 	_sprite.self_modulate = Color.WHITE
+	_base_sprite_scale = 0.7
 	_sprite.scale = Vector2(0.7, 0.7)
 
 	if team == 0:
@@ -410,9 +413,11 @@ func _apply_visual_identity() -> void:
 			ref = str(name)
 		if "BanditLeader" in ref or "Отаман" in ref:
 			_sprite.self_modulate = Color(1.00, 0.84, 0.55) # золотавий — ватажок
+			_base_sprite_scale = 0.78
 			_sprite.scale = Vector2(0.78, 0.78)
 		elif "TatarHeavy" in ref or "Татарський" in ref:
 			_sprite.self_modulate = Color(0.74, 0.78, 0.86) # сталевий — важкий
+			_base_sprite_scale = 0.78
 			_sprite.scale = Vector2(0.78, 0.78)
 
 func start_turn(is_new_round: bool = true) -> void:

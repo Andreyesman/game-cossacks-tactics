@@ -564,14 +564,22 @@ func draw_cell_highlight(mx: int, my: int, color: Color) -> void:
 	])
 	draw_colored_polygon(points, color)
 
+var _cached_battle_ui: Node = null
+var _cached_bm: Node = null
+
 func _process(_delta: float) -> void:
 	# Блокування взаємодії з полем, якщо відкрито вікно персонажа АБО миша над UI
-	var ui = get_parent().get_node_or_null("UI")
+	# (посилання кешовані — find_child щокадру був рекурсивним пошуком по всій сцені)
+	if _cached_battle_ui == null or not is_instance_valid(_cached_battle_ui):
+		_cached_battle_ui = get_parent().get_node_or_null("UI")
+	var ui = _cached_battle_ui
 	var is_sheet_open = ui and ui.has_node("CharacterSheet") and ui.get_node("CharacterSheet").visible
 	var is_over_ui = get_viewport().gui_get_hovered_control() != null
 
 	if is_sheet_open or is_over_ui:
-		var bm = get_parent().find_child("BattleManager")
+		if _cached_bm == null or not is_instance_valid(_cached_bm):
+			_cached_bm = get_parent().find_child("BattleManager")
+		var bm = _cached_bm
 		if hovered_unit != null:
 			if bm: bm.update_hover_info(null)
 			hovered_unit = null

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="UnitData" format=3 uid="uid://cleoai312uea5"]
 
-[ext_resource type="Texture2D" uid="uid://bpturyx5m5to3" path="res://ui/imports/figma_godot_export/images/a922b99b35129ba0eabcc0dcecae6c15bf0f106b.png" id="1_2sw5d"]
+[ext_resource type="Texture2D" uid="uid://bpturyx5m5to3" path="res://ui/imports/MainMenu/images/a922b99b35129ba0eabcc0dcecae6c15bf0f106b.png" id="1_2sw5d"]
 [ext_resource type="Script" uid="uid://c5lu8cqn6eh8q" path="res://src/resources/UnitData.gd" id="1_script"]
 
 [resource]
