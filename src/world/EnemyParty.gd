@@ -18,6 +18,7 @@ var reward_thalers: int = 100
 var _wait_timer: float = 0.0
 var _player_ref: Node2D = null
 var _enemy_target: Node2D = null  # ціль для міжфракційного бою (тільки бандити)
+var _world_map_ref: Node = null   # кеш — не шукати щокадру
 
 signal encounter_reached(party: Node2D)
 
@@ -93,8 +94,8 @@ func _process_patrol(delta: float) -> void:
 
 	position += (target - position).normalized() * SPEED * delta
 
-	# Перевіряємо чи гравець поруч
-	if _player_ref and position.distance_to(_player_ref.position) < DETECTION_RADIUS:
+	# Перевіряємо чи гравець поруч (болота/яри — місця засідок: бандити бачать далі)
+	if _player_ref and position.distance_to(_player_ref.position) < DETECTION_RADIUS * _ambush_multiplier():
 		_evaluate_hostility_and_strength()
 
 	# Бандити сканують слабші фракційні загони
@@ -172,6 +173,27 @@ func _simulate_party_battle(target: Node2D) -> void:
 					parties.remove_at(i)
 					break
 		queue_free()
+
+# Засідки: коли гравець у болоті чи яру, бандитські загони помічають його далі.
+# Фракційні патрулі (orda/crown) у засідках не сидять.
+func _ambush_multiplier() -> float:
+	if faction != "none" and faction != "bandits":
+		return 1.0
+	if not _player_ref:
+		return 1.0
+	var wm := _get_world_map()
+	if wm:
+		return wm.get_ambush_detection_multiplier(_player_ref.position)
+	return 1.0
+
+func _get_world_map() -> Node:
+	if is_instance_valid(_world_map_ref):
+		return _world_map_ref
+	var n: Node = get_parent()
+	while n != null and not n.has_method("get_ambush_detection_multiplier"):
+		n = n.get_parent()
+	_world_map_ref = n
+	return n
 
 func _process_pursue(delta: float) -> void:
 	# Переслідування ворожого фракційного загону

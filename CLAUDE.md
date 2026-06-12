@@ -26,7 +26,8 @@ var world_state: Dictionary = {}
 # { day, thalers, provisions, faction_rep:{crown,sich,orda},
 #   locations:[{id,type,faction,pos,garrison_paths,cleared,reward_thalers,name}],
 #   enemy_parties:[{id,faction,unit_paths,patrol_waypoints,base_pos,pos,alive}],
-#   player_pos, biomes, rivers, lakes, roads,
+#   player_pos, rivers, lakes, roads,
+#   forest_patches, hill_patches, swamp_patches, kurgans, ravines, influence_anchors,
 #   squad:[{name,hp,max_hp,morale,...}] }
 
 var active_battle_config: Dictionary = {}
@@ -134,7 +135,7 @@ func _local_to_cell(local_pos: Vector2) -> Vector2i:  # позиція юніт�
 - **Броня:** `src/resources/equipment/armor/*.tres`, `helmets/*.tres`
 - **Портрети:** `assets/portraits/`, placeholder-SVG: `assets/ui/`
 
-## Current state (v4.6 — 09.06.2026)
+## Current state (v4.8 — 12.06.2026)
 
 **Що реалізовано:**
 - Бойовий цикл: рух, атаки, ШІ, мораль, ZoC, LoS, riposte/rally, відступ, TurnQueueUI, tutorial-бій
@@ -144,10 +145,10 @@ func _local_to_cell(local_pos: Vector2) -> Vector2i:  # позиція юніт�
 - Спрайти юнітів (14 PNG), іконки предметів (InventoryManager.ITEM_ICONS), тайли місцевості
 - Native Theme (`assets/theme/game_theme.tres`), TopBar (три пергаментні панелі, Figma-дизайн)
 - CampaignManager + WorldGenerator: proc-gen світ, фракції, репутація; голод/дезертирство, Game Over
+- Глобальна карта (v4.8): процедурна географія (пергаментний шейдер, ліси/пагорби/болота/кургани/яри як патчі-полігони), швидкість руху й радіус огляду залежать від місцевості, засідки бандитів у болотах/ярах (`get_ambush_detection_multiplier`), невидимі зони впливу (`influence_anchors`, `get_faction_at`); прямокутних біомів більше немає
 
 **TODO / Фаза 3.5 (залишок):**
-- Портрети юнітів (4 козаки + рекрути + вороги) — `UnitData.tres → portrait: Texture2D`
-- Текстури глобальної карти (біоми, іконки локацій, іконка гравця)
+- Текстури глобальної карти (іконки локацій, іконка гравця; заміна процедурних символів на арт)
 - UI polish (фон MainMenu, стилізовані кнопки, курсор)
 
 Повна документація: [docs/00_VERSION_HISTORY.md](docs/00_VERSION_HISTORY.md)

@@ -199,7 +199,7 @@ func _update_camera_zoom() -> void:
 # ── Рендер карти ─────────────────────────────────────────────────────────────
 
 func _render_world(state: Dictionary) -> void:
-	_render_biomes(state.get("biomes", [])) # biomes arg kept for API compat (ignored internally)
+	_render_biomes()
 	_render_water(state.get("rivers", []), state.get("lakes", []))
 	_render_roads(state.get("roads", []))
 	_render_locations(state.get("locations", []))
@@ -559,7 +559,7 @@ func _update_entity_visibility_and_discovery() -> void:
 					marker.visible = true
 
 
-func _render_biomes(_biomes: Array) -> void:
+func _render_biomes() -> void:
 	# ── Широкий фон (за межами карти) ─────────────────────────────────────────
 	var huge_bg := ColorRect.new()
 	huge_bg.position = Vector2(-5000, -5000)
@@ -942,6 +942,15 @@ func get_terrain_speed_modifier(pos: Vector2) -> float:
 			return 0.40 # -60% швидкість в ярах (багнах) або обхід
 		_:
 			return 1.0 # Степ/Курган — звичайна швидкість
+
+## Множник радіусу виявлення гравця ворожими загонами.
+## Болота та яри — місця засідок: бандити помічають гравця значно далі.
+func get_ambush_detection_multiplier(pos: Vector2) -> float:
+	match _get_biome_at(pos):
+		"swamp", "ravine":
+			return 1.6
+		_:
+			return 1.0
 
 ## Повертає назву фракції, яка контролює точку pos (Voronoi за найближчим містом).
 func get_faction_at(pos: Vector2) -> String:

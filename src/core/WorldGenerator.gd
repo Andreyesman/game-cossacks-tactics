@@ -22,7 +22,6 @@ func generate(state: Dictionary) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 
-	_gen_biomes(state)
 	_gen_water(state, rng)
 	_gen_geography(state, rng)
 	_gen_locations(state, rng)
@@ -158,33 +157,6 @@ func _gen_influence_zones(state: Dictionary) -> void:
 				"pos": loc["pos"]
 			})
 	state["influence_anchors"] = anchors
-
-# ── Біоми (3 фіксованих зони) ─────────────────────────────────────────────────
-
-func _gen_biomes(state: Dictionary) -> void:
-	state["biomes"] = [
-		{
-			"id": "forest",
-			"name": tr("Ліси"),
-			"rect": {"x": 0.0, "y": 0.0, "w": MAP_W * 0.38, "h": MAP_H},
-			"color": {"r": 0.13, "g": 0.22, "b": 0.10, "a": 1.0},
-			"faction": "none"
-		},
-		{
-			"id": "steppe",
-			"name": tr("Дике Поле"),
-			"rect": {"x": MAP_W * 0.38, "y": 0.0, "w": MAP_W * 0.38, "h": MAP_H},
-			"color": {"r": 0.32, "g": 0.26, "b": 0.10, "a": 1.0},
-			"faction": "orda"
-		},
-		{
-			"id": "border",
-			"name": tr("Кордон"),
-			"rect": {"x": MAP_W * 0.76, "y": 0.0, "w": MAP_W * 0.24, "h": MAP_H},
-			"color": {"r": 0.15, "g": 0.18, "b": 0.22, "a": 1.0},
-			"faction": "crown"
-		}
-	]
 
 # ── Ріки та озера ─────────────────────────────────────────────────────────────
 
