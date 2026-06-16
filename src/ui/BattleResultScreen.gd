@@ -26,12 +26,10 @@ func _build_ui(is_victory: bool, player_units: Array) -> void:
 
 	_panel = PanelContainer.new()
 	_panel.custom_minimum_size = Vector2(820, 0)
-	var panel_style = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.07, 0.065, 0.055)
-	panel_style.border_color = Color(0.65, 0.5, 0.18) if is_victory else Color(0.6, 0.15, 0.15)
-	panel_style.set_border_width_all(3)
-	panel_style.set_corner_radius_all(6)
-	_panel.add_theme_stylebox_override("panel", panel_style)
+	# Перемога — золота рамка, поразка — червонуватий відтінок орнаменту
+	var frame_tint := Color.WHITE if is_victory else Color(1.0, 0.55, 0.55)
+	var fallback_border := Color(0.65, 0.5, 0.18) if is_victory else Color(0.6, 0.15, 0.15)
+	UIStyle.apply_panel(_panel, frame_tint, Vector4(4, 4, 4, 4), fallback_border)
 	center.add_child(_panel)
 
 	var outer_mc = MarginContainer.new()
@@ -358,14 +356,7 @@ func _create_button(text: String, base_color: Color) -> Button:
 	var btn = Button.new()
 	btn.text = text
 	btn.custom_minimum_size = Vector2(200, 45)
-	var normal = StyleBoxFlat.new()
-	normal.bg_color = base_color
-	normal.set_corner_radius_all(4)
-	var hover = normal.duplicate(); hover.bg_color = base_color.lightened(0.2)
-	var press = normal.duplicate(); press.bg_color = base_color.darkened(0.2)
-	btn.add_theme_stylebox_override("normal", normal)
-	btn.add_theme_stylebox_override("hover", hover)
-	btn.add_theme_stylebox_override("pressed", press)
+	UIStyle.apply_button(btn, UIStyle.tint_from(base_color), Vector4(16, 8, 16, 8))
 	btn.add_theme_font_size_override("font_size", 18)
 	return btn
 

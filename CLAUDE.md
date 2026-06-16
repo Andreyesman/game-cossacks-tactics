@@ -135,7 +135,7 @@ func _local_to_cell(local_pos: Vector2) -> Vector2i:  # позиція юніт�
 - **Броня:** `src/resources/equipment/armor/*.tres`, `helmets/*.tres`
 - **Портрети:** `assets/portraits/`, placeholder-SVG: `assets/ui/`
 
-## Current state (v4.8 — 12.06.2026)
+## Current state (v4.9 — 12.06.2026)
 
 **Що реалізовано:**
 - Бойовий цикл: рух, атаки, ШІ, мораль, ZoC, LoS, riposte/rally, відступ, TurnQueueUI, tutorial-бій
@@ -144,12 +144,14 @@ func _local_to_cell(local_pos: Vector2) -> Vector2i:  # позиція юніт�
 - Локалізація uk/en (~361 ключів), AudioManager (музика + 9 SFX), Settings menu
 - Спрайти юнітів (14 PNG), іконки предметів (InventoryManager.ITEM_ICONS), тайли місцевості
 - Native Theme (`assets/theme/game_theme.tres`), TopBar (три пергаментні панелі, Figma-дизайн)
+- UI polish (v4.9): `src/ui/UIStyle.gd` — статичний хелпер дерев'яних кнопок (StyleBoxTexture 9-patch + tint) і орнаментних рамок панелей з фолбеком на StyleBoxFlat; курсор-перо (`Globals._setup_custom_cursor()`); SVG-асети в `assets/sprites/ui/` (тимчасові, замінюються Figma-артом за тими ж шляхами)
 - CampaignManager + WorldGenerator: proc-gen світ, фракції, репутація; голод/дезертирство, Game Over
 - Глобальна карта (v4.8): процедурна географія (пергаментний шейдер, ліси/пагорби/болота/кургани/яри як патчі-полігони), швидкість руху й радіус огляду залежать від місцевості, засідки бандитів у болотах/ярах (`get_ambush_detection_multiplier`), невидимі зони впливу (`influence_anchors`, `get_faction_at`); прямокутних біомів більше немає
 
-**TODO / Фаза 3.5 (залишок):**
+**TODO / Фаза 3.5 (залишок — лише арт-контент):**
 - Текстури глобальної карти (іконки локацій, іконка гравця; заміна процедурних символів на арт)
-- UI polish (фон MainMenu, стилізовані кнопки, курсор)
+- Заміна тимчасових SVG UI (`btn_wood_*`, `panel_frame_ornate`, `cursor_quill`) на фінальний арт із Figma
+- Справжні спрайти BanditLeader/TatarHeavy, `tile_trees.png`
 
 Повна документація: [docs/00_VERSION_HISTORY.md](docs/00_VERSION_HISTORY.md)
 

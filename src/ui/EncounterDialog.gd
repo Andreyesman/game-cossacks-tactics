@@ -16,6 +16,14 @@ func _ready() -> void:
 	_avoid_btn.pressed.connect(func(): avoid_pressed.emit())
 	_talk_btn.pressed.connect(func(): talk_pressed.emit())
 
+	# Дерев'яні кнопки з семантичними відтінками; стилі з .tscn — фолбек
+	UIStyle.apply_button(_attack_btn, UIStyle.tint_from(Color(0.45, 0.10, 0.10)), Vector4(14, 6, 14, 6))
+	UIStyle.apply_button(_avoid_btn, Color.WHITE, Vector4(14, 6, 14, 6))
+	UIStyle.apply_button(_talk_btn, UIStyle.tint_from(Color(0.15, 0.40, 0.15)), Vector4(14, 6, 14, 6))
+	var dlg_panel := get_node_or_null("CenterContainer/PanelContainer")
+	if dlg_panel is PanelContainer:
+		UIStyle.apply_panel(dlg_panel)
+
 func show_for(title: String, reward: int, options: Array) -> void:
 	_title_lbl.text = title
 	_reward_lbl.text = tr("ENCOUNTER_REWARD") % reward

@@ -38,16 +38,7 @@ func _build_overlay() -> void:
 	_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
-	var panel_style = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.07, 0.065, 0.055)
-	panel_style.border_color = Color(0.65, 0.5, 0.18)
-	panel_style.set_border_width_all(2)
-	panel_style.set_corner_radius_all(4)
-	panel_style.content_margin_left = 2
-	panel_style.content_margin_right = 2
-	panel_style.content_margin_top = 2
-	panel_style.content_margin_bottom = 2
-	_panel.add_theme_stylebox_override("panel", panel_style)
+	UIStyle.apply_panel(_panel, Color.WHITE, Vector4(2, 2, 2, 2))
 	center.add_child(_panel)
 
 	var scroll = ScrollContainer.new()

@@ -1,5 +1,44 @@
 # Історія змін GDD
 
+## Версія 4.9 — 12.06.2026
+
+### UI polish (Фаза 3.5, пункт 4.5.6) — дерев'яні кнопки, орнаментні рамки, курсор-перо
+
+#### `src/ui/UIStyle.gd` (новий)
+
+- Статичний хелпер (`class_name`, не autoload — патерн `InventoryManager`). `apply_button(btn, tint, margins)`, `apply_panel(panel, tint, margins, fallback_border)`, `tint_from(base)`.
+- `StyleBoxTexture` з 9-patch межами. Фолбек на `StyleBoxFlat` у палітрі гри, якщо SVG відсутній — гра не падає без файлів (конвенція `TERRAIN_TEXTURES`/`ITEM_ICONS`).
+
+#### `assets/sprites/ui/` — 5 нових SVG (тимчасові, процедурні)
+
+- `btn_wood_normal/hover/pressed.svg` (192×64, 9-patch margin 16) — дерев'яна дошка з волокнами, сучками, цвяшками; hover дає золотий обідок, pressed — втиснута фаска.
+- `panel_frame_ornate.svg` (192×192, margin 56) — рослинні завитки в кутах, подвійна золота лінія по краях, центр #0f0e0c.
+- `cursor_quill.svg` (48×48) — гусяче перо, hotspot у кінчику (3,3).
+- Figma-арт пізніше замінить файли за тими ж шляхами без змін у коді.
+
+#### `src/core/Globals.gd`
+
+- Додано `_ready()` → `_setup_custom_cursor()`: `Input.set_custom_mouse_cursor()` для `CURSOR_ARROW` і `CURSOR_POINTING_HAND`. Globals — перший autoload, курсор активний ще до MainMenu.
+
+#### `src/ui/MainMenu.gd`
+
+- Увімкнено мертву `_add_gradient_overlay()` (градієнтне затемнення зліва для читабельності заголовка/кнопок поверх ілюстрації). Кнопка «Закрити» Settings і панель Settings — через `UIStyle`.
+
+#### Точки застосування
+
+- Кнопки: `BattleResultScreen._create_button()`, `WorldMap._make_dialog_btn()/_make_trade_btn()`, `BattleManager._style_end_turn_button()` (зелений tint), `EncounterDialog` (червоний/нейтральний/зелений tint — code-override, `.tscn` не чіпали).
+- Рамки панелей: Settings, CharacterSheet, BattleResultScreen (червонуватий tint при поразці), Game Over, діалог поселення, EncounterDialog.
+
+#### Свідомо не чіпали
+
+- Великі кнопки MainMenu (Tween анімує `StyleBoxFlat.bg_color` — несумісно зі StyleBoxTexture, навмисний дизайн), TopBar (Figma), нутрощі UnitPanel/CombatLog/TurnQueueUI, `game_theme.tres`.
+
+#### Верифікація
+
+- Headless-компіляція 7 змінених скриптів — без помилок. Візуально в грі: градієнт меню, Settings (орнаментна рамка + дерев'яна «Закрити»), EncounterDialog, End Turn; бій запускається чисто.
+
+---
+
 ## Версія 4.8 — 12.06.2026
 
 ### Закрито 4.5.5 — Процедурна географія глобальної карти та зони впливу

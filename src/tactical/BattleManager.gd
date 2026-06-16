@@ -513,31 +513,10 @@ func _style_end_turn_button() -> void:
 
 	btn.text = "🏁 " + tr("UI_END_TURN")
 
-	var normal = StyleBoxFlat.new()
-	normal.bg_color = Color(0.12, 0.18, 0.12)
-	normal.set_border_width_all(2)
-	normal.border_color = Color(0.2, 0.5, 0.2)
-	normal.set_corner_radius_all(4)
-	normal.content_margin_left = 16
-	normal.content_margin_right = 16
-	normal.content_margin_top = 8
-	normal.content_margin_bottom = 8
-	
-	var hover = normal.duplicate()
-	hover.bg_color = Color(0.2, 0.3, 0.2)
-	hover.border_color = Color(0.3, 0.8, 0.3)
-	
-	var disabled = normal.duplicate()
-	disabled.bg_color = Color(0.08, 0.08, 0.08, 0.6)
-	disabled.border_color = Color(0.15, 0.15, 0.15)
-	
-	btn.add_theme_stylebox_override("normal", normal)
-	btn.add_theme_stylebox_override("hover", hover)
-	btn.add_theme_stylebox_override("pressed", hover)
-	btn.add_theme_stylebox_override("disabled", disabled)
+	# Дерев'яна кнопка із зеленуватим відтінком (семантика «завершити хід»)
+	UIStyle.apply_button(btn, UIStyle.tint_from(Color(0.2, 0.5, 0.2)), Vector4(16, 8, 16, 8))
 	btn.add_theme_font_size_override("font_size", 20)
 	btn.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
-	btn.add_theme_color_override("font_color_disabled", Color(0.4, 0.4, 0.4))
 
 func _on_tutorial_skip_pressed() -> void:
 	_hide_tutorial_panel()
