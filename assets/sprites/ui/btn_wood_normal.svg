@@ -1,0 +1,36 @@
+<svg width="192" height="64" viewBox="0 0 192 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Дерев'яна кнопка: стан normal. 9-patch margin 16px -->
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7c5a33"/>
+      <stop offset="0.12" stop-color="#6e4e2a"/>
+      <stop offset="0.5" stop-color="#5f4223"/>
+      <stop offset="0.88" stop-color="#52381d"/>
+      <stop offset="1" stop-color="#46301a"/>
+    </linearGradient>
+  </defs>
+  <!-- Темна окантовка -->
+  <rect x="1" y="1" width="190" height="62" rx="7" fill="#241708"/>
+  <!-- Тіло дошки -->
+  <rect x="4" y="4" width="184" height="56" rx="5" fill="url(#wood)"/>
+  <!-- Верхня світла фаска -->
+  <rect x="6" y="5" width="180" height="3" rx="1.5" fill="#94703f" opacity="0.55"/>
+  <!-- Нижня темна фаска -->
+  <rect x="6" y="56" width="180" height="3" rx="1.5" fill="#2e1f0d" opacity="0.6"/>
+  <!-- Волокна дерева: суцільні горизонтальні лінії (стретч-стійкі) -->
+  <rect x="6" y="16" width="180" height="1.6" fill="#4a3318" opacity="0.65"/>
+  <rect x="6" y="25" width="180" height="1.2" fill="#7d5c33" opacity="0.45"/>
+  <rect x="6" y="33" width="180" height="1.8" fill="#432d15" opacity="0.6"/>
+  <rect x="6" y="42" width="180" height="1.2" fill="#7d5c33" opacity="0.4"/>
+  <rect x="6" y="50" width="180" height="1.5" fill="#4a3318" opacity="0.55"/>
+  <!-- Сучки по кутах (в межах 9-patch кутів, щоб не розтягувались) -->
+  <ellipse cx="13" cy="13" rx="3.2" ry="2.3" fill="#3a2811" opacity="0.8"/>
+  <ellipse cx="13" cy="13" rx="1.5" ry="1.0" fill="#2a1c0a"/>
+  <ellipse cx="179" cy="51" rx="3.0" ry="2.2" fill="#3a2811" opacity="0.8"/>
+  <ellipse cx="179" cy="51" rx="1.4" ry="0.9" fill="#2a1c0a"/>
+  <!-- Кутові цвяшки -->
+  <circle cx="11" cy="53" r="1.8" fill="#241708"/>
+  <circle cx="10.6" cy="52.6" r="0.8" fill="#8a6a3e"/>
+  <circle cx="181" cy="11" r="1.8" fill="#241708"/>
+  <circle cx="180.6" cy="10.6" r="0.8" fill="#8a6a3e"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- Орнаментна рамка панелі. 9-patch margin 48px: краї — суцільні лінії (стретч-стійкі), кути — орнамент -->
+  <defs>
+    <!-- Кутовий завиток (рослинний орнамент) — малюється у верхньому лівому куті -->
+    <g id="curl">
+      <path d="M 16 40 C 16 24, 24 16, 40 16" fill="none" stroke="#9e7524" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M 20 36 C 21 27, 27 21, 36 20" fill="none" stroke="#6e5420" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Спіральний завиток у самому куті -->
+      <path d="M 17 17 C 26 14, 31 19, 28 25 C 26 29, 21 29, 20 25 C 19.4 22.6, 21.6 20.8, 23.5 21.8"
+            fill="none" stroke="#c9a227" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Листочки -->
+      <path d="M 40 16 C 44 12, 50 12, 53 15 C 49 18, 44 18, 40 16 Z" fill="#9e7524"/>
+      <path d="M 16 40 C 12 44, 12 50, 15 53 C 18 49, 18 44, 16 40 Z" fill="#9e7524"/>
+      <!-- Ягідка -->
+      <circle cx="33" cy="33" r="2.2" fill="#c9a227"/>
+    </g>
+  </defs>
+
+  <!-- Тло панелі -->
+  <rect x="0" y="0" width="192" height="192" rx="10" fill="#0f0e0c"/>
+  <!-- Зовнішня золота лінія (товста) -->
+  <rect x="4" y="4" width="184" height="184" rx="8" fill="none" stroke="#9e7524" stroke-width="2.6"/>
+  <!-- Внутрішня золота лінія (тонка) -->
+  <rect x="11" y="11" width="170" height="170" rx="5" fill="none" stroke="#6e5420" stroke-width="1.2"/>
+  <!-- Ледь помітне внутрішнє свічення біля рамки -->
+  <rect x="13" y="13" width="166" height="166" rx="4" fill="none" stroke="#c9a227" stroke-width="0.6" opacity="0.25"/>
+
+  <!-- Орнамент у чотирьох кутах -->
+  <use href="#curl"/>
+  <use href="#curl" transform="translate(192,0) scale(-1,1)"/>
+  <use href="#curl" transform="translate(0,192) scale(1,-1)"/>
+  <use href="#curl" transform="translate(192,192) scale(-1,-1)"/>
+</svg>

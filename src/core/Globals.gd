@@ -17,3 +17,16 @@ const CHANCE_MAX = 95
 
 # Глобальний прапорець debug-логів: увімкни true під час налагодження
 const DEBUG_LOG := false
+
+func _ready() -> void:
+	_setup_custom_cursor()
+
+# Кастомний курсор-перо: Globals — перший autoload, тож курсор активний
+# ще до MainMenu. Без файлу — лишається системний курсор.
+func _setup_custom_cursor() -> void:
+	if not ResourceLoader.exists(UIStyle.CURSOR_TEX):
+		return
+	var tex: Texture2D = load(UIStyle.CURSOR_TEX)
+	var hotspot := Vector2(3, 3)  # кінчик пера у SVG
+	Input.set_custom_mouse_cursor(tex, Input.CURSOR_ARROW, hotspot)
+	Input.set_custom_mouse_cursor(tex, Input.CURSOR_POINTING_HAND, hotspot)

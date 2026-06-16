@@ -68,6 +68,9 @@ func _add_background() -> void:
 		var tween := create_tween()
 		tween.tween_property(hero, "modulate:a", 1.0, 0.7).set_ease(Tween.EASE_OUT)
 
+	# Градієнтне затемнення зліва — читабельність заголовка і кнопок поверх ілюстрації
+	_add_gradient_overlay()
+
 func _add_gradient_overlay() -> void:
 	var gradient := Gradient.new()
 	gradient.offsets = PackedFloat32Array([0.0, 0.50, 0.72, 1.0])
@@ -427,16 +430,9 @@ func _build_settings_overlay() -> Control:
 	center.mouse_filter = Control.MOUSE_FILTER_PASS
 	overlay.add_child(center)
 
-	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.07, 0.065, 0.055)
-	panel_style.border_color = Color(0.65, 0.5, 0.18)
-	panel_style.set_border_width_all(2)
-	panel_style.set_corner_radius_all(4)
-	panel_style.shadow_size = 0
-
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(400, 0)
-	panel.add_theme_stylebox_override("panel", panel_style)
+	UIStyle.apply_panel(panel)
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	center.add_child(panel)
 
@@ -558,21 +554,7 @@ func _build_settings_overlay() -> Control:
 	_settings_close_btn.add_theme_color_override("font_pressed_color", C_GOLD_DIM)
 	_settings_close_btn.add_theme_color_override("font_focus_color", C_GOLD)
 	_settings_close_btn.focus_mode = Control.FOCUS_NONE
-	var close_sn := StyleBoxFlat.new()
-	close_sn.bg_color = Color(0.15, 0.15, 0.15)
-	close_sn.border_color = Color(0.55, 0.42, 0.15)
-	close_sn.set_border_width_all(1)
-	close_sn.set_corner_radius_all(4)
-	close_sn.content_margin_left = 24.0
-	close_sn.content_margin_right = 24.0
-	close_sn.content_margin_top = 10.0
-	close_sn.content_margin_bottom = 10.0
-	var close_hover := close_sn.duplicate() as StyleBoxFlat
-	close_hover.bg_color = Color(0.22, 0.20, 0.14)
-	_settings_close_btn.add_theme_stylebox_override("normal",  close_sn)
-	_settings_close_btn.add_theme_stylebox_override("hover",   close_hover)
-	_settings_close_btn.add_theme_stylebox_override("pressed", close_sn.duplicate())
-	_settings_close_btn.add_theme_stylebox_override("focus",   StyleBoxEmpty.new())
+	UIStyle.apply_button(_settings_close_btn, Color.WHITE, Vector4(24, 10, 24, 10))
 	_settings_close_btn.pressed.connect(func(): overlay.visible = false)
 	btn_row.add_child(_settings_close_btn)
 

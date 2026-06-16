@@ -1580,12 +1580,7 @@ func _show_location_dialog(marker: Node2D) -> void:
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(420, 0)
-	var pst := StyleBoxFlat.new()
-	pst.bg_color = Color(0.06, 0.055, 0.045)
-	pst.border_color = Color(0.35, 0.35, 0.35)
-	pst.set_border_width_all(2)
-	pst.set_corner_radius_all(5)
-	panel.add_theme_stylebox_override("panel", pst)
+	UIStyle.apply_panel(panel, Color.WHITE, Vector4(4, 4, 4, 4), Color(0.35, 0.35, 0.35))
 	center.add_child(panel)
 
 	var mc := MarginContainer.new()
@@ -1783,15 +1778,7 @@ func _make_trade_btn(text: String, enabled: bool) -> Button:
 	btn.text = text
 	btn.custom_minimum_size = Vector2(90, 34)
 	btn.disabled = not enabled
-	var active_col := Color(0.18, 0.28, 0.12)
-	var dim_col := Color(0.12, 0.12, 0.12, 0.7)
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = active_col if enabled else dim_col
-	normal.set_corner_radius_all(4)
-	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = active_col.lightened(0.25)
-	btn.add_theme_stylebox_override("normal", normal)
-	btn.add_theme_stylebox_override("hover", hover)
+	UIStyle.apply_button(btn, UIStyle.tint_from(Color(0.18, 0.28, 0.12)), Vector4(10, 2, 10, 2))
 	btn.add_theme_font_size_override("font_size", 13)
 	btn.add_theme_color_override("font_color", Color(0.88, 0.82, 0.5))
 	return btn
@@ -1927,13 +1914,7 @@ func _make_dialog_btn(text: String, base_color: Color) -> Button:
 	var btn := Button.new()
 	btn.text = text
 	btn.custom_minimum_size = Vector2(130, 42)
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = base_color
-	normal.set_corner_radius_all(4)
-	var hover := normal.duplicate(); hover.bg_color = base_color.lightened(0.2)
-	btn.add_theme_stylebox_override("normal", normal)
-	btn.add_theme_stylebox_override("hover", hover)
-	btn.add_theme_stylebox_override("pressed", hover)
+	UIStyle.apply_button(btn, UIStyle.tint_from(base_color), Vector4(14, 6, 14, 6))
 	btn.add_theme_font_size_override("font_size", 15)
 	return btn
 
@@ -2077,12 +2058,7 @@ func _show_game_over() -> void:
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(420, 0)
-	var pst := StyleBoxFlat.new()
-	pst.bg_color = Color(0.06, 0.055, 0.045)
-	pst.border_color = Color(0.75, 0.62, 0.22)
-	pst.set_border_width_all(2)
-	pst.set_corner_radius_all(5)
-	panel.add_theme_stylebox_override("panel", pst)
+	UIStyle.apply_panel(panel, Color.WHITE, Vector4(4, 4, 4, 4), Color(0.75, 0.62, 0.22))
 	center.add_child(panel)
 
 	var mc := MarginContainer.new()
